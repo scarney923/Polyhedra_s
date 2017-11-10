@@ -79,6 +79,7 @@ public class PolyhedronFileReader {
     for(int i=0; i<number_of_faces; i++ ){
       face_vertices = new Point3D[ number_of_face_vertices ];
 
+      //number_of_face_vertices nextInt
       for(int j=0; j<number_of_face_vertices; j++){
         which_vertice = scanner.nextInt();
         face_vertices[j] = new Point3D( vertices[ which_vertice ] );
