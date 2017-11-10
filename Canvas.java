@@ -20,7 +20,7 @@ public class Canvas extends JPanel {
 		setBackground(Color.black);
     //octahedron = new Octahedron();
     //dodecahedron = new Dodecahedron();
-    polyhedron = new GStellatedDodecahedron();
+    polyhedron = new GreatIcosahedron();
   }
 
   public void paintComponent(Graphics g){
