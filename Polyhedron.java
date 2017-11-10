@@ -51,6 +51,8 @@ public abstract class Polyhedron {
     /*the camera position is on the z-axis. however, it's important that it lies
     outside of the cube, i.e. that it's z coordinate > 1 */
     double[] camera_position = {0.0,0.0,7.0};
+
+    Arrays.sort(faces);
     for( Face face : faces ){
       boolean visible = false;
 
