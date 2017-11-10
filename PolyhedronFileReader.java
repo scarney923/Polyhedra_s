@@ -20,7 +20,7 @@ public class PolyhedronFileReader {
 
 
 
-  public PolyhedronFileReader(String aFileName, int number_of_vertices, int number_of_faces, int number_of_face_vertices){
+  public PolyhedronFileReader(String aFileName, int number_of_vertices, int number_of_faces, int number_of_face_vertices, boolean isVariable){
     fFilePath = Paths.get(aFileName);
     try{
       scanner =  new Scanner(fFilePath);

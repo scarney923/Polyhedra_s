@@ -6,7 +6,8 @@ public class Octahedron extends Polyhedron{
   public Octahedron(){
     super.faces = new Face[8];
     super.number_of_faces = 8;
-    super.number_of_vertices_per_face = 3;
+    super.number_of_face_vertices = 3;
+    super.isVariable = false; 
 
     //Initialize faces with their respective vertices. The vertices around each face is arranged in CLOCKWISE order.
 

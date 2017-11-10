@@ -6,7 +6,8 @@ public class Cube extends Polyhedron {
   public Cube(){
     super.faces = new Face[6];
     super.number_of_faces = 6;
-    super.number_of_vertices_per_face = 4;
+    super.number_of_face_vertices = 4;
+    super.isVariable = false; 
 
     //Initialize faces with their respective vertices. The vertices around each face is arranged in CLOCKWISE order.
 

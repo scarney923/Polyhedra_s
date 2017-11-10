@@ -8,6 +8,7 @@ public abstract class Polyhedron {
   int number_of_vertices;
   int number_of_faces;
   int number_of_face_vertices;
+  boolean isVariable; 
 
   Face[] faces;
 
