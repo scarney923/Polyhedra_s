@@ -59,10 +59,11 @@ public class PolyhedronFileReader {
     double z;
 
     for(int i=0; i<number_of_vertices; i++ ){
-      x = Double.parseDouble(scanner.next());
-      y = Double.parseDouble(scanner.next());
-      z = Double.parseDouble(scanner.next());
+      x = parse(scanner.next()); 
+      y = parse(scanner.next()); 
+      z = parse(scanner.next()); 
       vertice = new double[] {x, y, z};
+      System.out.println("X, Y, Z: " + x + y + z); 
       vertices[i] = vertice;
       scanner.nextLine();
 
@@ -90,6 +91,17 @@ public class PolyhedronFileReader {
     }
 
     return faces;
+  }
+  
+  public double parse(String next){
+  
+   if(next.contains("E")){
+      return 0; 
+   }
+   else{
+      return Double.parseDouble(next); 
+   
+   }
   }
 
 
