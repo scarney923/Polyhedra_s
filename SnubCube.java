@@ -8,8 +8,8 @@ public class SnubCube extends Polyhedron {
     super.isVariable = true; 
 
 
-    PolyhedronFileReader reader = new PolyhedronFileReader("./polyhedra_data/SnubCube.txt", number_of_vertices, number_of_faces, number_of_face_vertices );
-    super.faces = reader.generate_faces_from_file_data();
+    PolyhedronFileReader reader = new PolyhedronFileReader("./polyhedra_data/SnubCube.txt", number_of_vertices, number_of_faces, number_of_face_vertices, true );
+    super.faces = reader.snubCube();
 
 
   }

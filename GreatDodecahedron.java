@@ -8,7 +8,7 @@ public class GreatDodecahedron extends Polyhedron {
     super.number_of_face_vertices = 3;
     super.isVariable = false; 
 
-    PolyhedronFileReader reader = new PolyhedronFileReader("./polyhedra_data/Great_Dodecahedron.txt", 20, 12, 5, false );
+    PolyhedronFileReader reader = new PolyhedronFileReader("./polyhedra_data/GreatDodecahedron.txt", 32, 60, 3, false );
     super.faces = reader.generate_faces_from_file_data();
 
 

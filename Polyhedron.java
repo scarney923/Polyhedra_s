@@ -25,7 +25,7 @@ public abstract class Polyhedron {
       double x1, y1, x2, y2;
       Point3D p1, p2;
 
-        for( int i=0; i<number_of_face_vertices; i++ ){
+        for( int i=0; i<face.vertices.length-1; i++ ){
           p1 = face.vertices[i];
           p2 = face.vertices[i+1];
           /*since any transformation might have distorted the coordinates in their
