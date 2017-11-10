@@ -43,55 +43,6 @@ public class PolyhedronFileReader {
     colors[8] = Color.LIGHT_GRAY;
     colors[9] = Color.YELLOW;
   }
-
-
-  public Face[] generate_faces_from_file_data() {
-    Face[] faces = new Face[ number_of_faces ];
-    String n;
-    for(int i=0; i<5; i++)
-      System.out.println(scanner.nextLine());
-
-    double[][] vertices = new double[number_of_vertices][3];
-
-    double[] vertex;
-    double x;
-    double y;
-    double z;
-
-    for(int i=0; i<number_of_vertices; i++ ){
-      x = parse(scanner.next()); 
-      y = parse(scanner.next()); 
-      z = parse(scanner.next()); 
-      vertex = new double[] {x, y, z};
-      System.out.println("X, Y, Z: " + x + y + z); 
-      vertices[i] = vertex;
-      scanner.nextLine();
-
-    }
-
-    System.out.println(scanner.nextLine());
-
-    //    super.faces[0]=new Face( 3, Color.blue, new Point3D(0, 1, 0),new Point3D(0, 0, 1),new Point3D(1, 0, 0) );
-
-    int which_vertice;
-    int color_number;
-    Point3D[] face_vertices;
-
-    for(int i=0; i<number_of_faces; i++ ){
-      face_vertices = new Point3D[ number_of_face_vertices ];
-
-      //number_of_face_vertices nextInt
-      for(int j=0; j<number_of_face_vertices; j++){
-        which_vertice = scanner.nextInt();
-        face_vertices[j] = new Point3D( vertices[ which_vertice ] );
-      }
-      color_number = scanner.nextInt(); //
-      faces[i] = new Face( number_of_face_vertices, colors[ color_number ], face_vertices );
-      scanner.nextLine();
-    }
-
-    return faces;
-  }
   
   public double parse(String next){
   
@@ -104,28 +55,19 @@ public class PolyhedronFileReader {
    }
   }
 
-  public Face[] snubCube(){
+  public Face[] generate_faces_from_file_data(){
     Face[] faces = new Face[ number_of_faces ];
     String n;
     for(int i=0; i<5; i++)
       System.out.println(scanner.nextLine());
 
-    double[][] vertices = new double[number_of_vertices][];
+    double[][] vertices = new double[number_of_vertices][3];
 
     double[] vertex;
     double x;
     double y;
     double z;
 
-    // for(int i=0; i<number_of_vertices; i++ ){
-//       String all = scanner.nextLine(); 
-//       String[] split = all.split(""); 
-//       int numOfVertices = split
-//       x = parse(split[0]);
-//       y = parse(split[1]); 
-//       z = parse(split[2]);  
-//     }
-    
      for(int i=0; i<number_of_vertices; i++ ){
       x = parse(scanner.next()); 
       y = parse(scanner.next()); 
@@ -137,16 +79,11 @@ public class PolyhedronFileReader {
     }
 
     scanner.nextLine();
-
-    //    super.faces[0]=new Face( 3, Color.blue, new Point3D(0, 1, 0),new Point3D(0, 0, 1),new Point3D(1, 0, 0) );
-
     int which_vertice;
     int color_number;
     Point3D[] face_vertices;
 
     for(int i=0; i<number_of_faces; i++ ){
-      //face_vertices = new Point3D[ number_of_face_vertices ];
-      //number_of_face_vertices nextInt        
         String str = scanner.nextLine();
         String[] ind = str.split(" "); 
         int numOfVertsPerFace = ind.length-1;
@@ -159,7 +96,6 @@ public class PolyhedronFileReader {
         }
       color_number = (int)parse(ind[numOfVertsPerFace]); //
       faces[i] = new Face( numOfVertsPerFace, colors[ color_number ], face_vertices );
-      //scanner.nextLine();
     }
     return faces; 
   }
