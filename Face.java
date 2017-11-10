@@ -34,9 +34,9 @@ public class Face implements Comparable {
       /* For Ascending order*/
       double result = z_cummulative/vertices.length - other_z_cummulative/vertices.length ;
       if( result > 0 )
-        return 1;
-      if( result < 0 )
         return -1;
+      if( result < 0 )
+        return 1;
       return 0;
 
 
