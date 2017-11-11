@@ -7,14 +7,11 @@ public abstract class Polyhedron {
 
   int number_of_vertices;
   int number_of_faces;
-  int number_of_face_vertices;
-  boolean isVariable; 
-
   Face[] faces;
 
   public void transform(double[][] M){
     for(Face face : faces)
-      for(int i=0; i<number_of_face_vertices; i++)
+      for(int i=0; i<face.number_of_vertices; i++)
         face.vertices[i].apply_transform(M);
   }
 
@@ -46,8 +43,8 @@ public abstract class Polyhedron {
   }
 
   public void draw_colored(Graphics2D g2d){
-    int[] xpoints = new int[ number_of_face_vertices ];
-    int[] ypoints = new int[ number_of_face_vertices ];
+    int[] xpoints;
+    int[] ypoints;
 
     /*the camera position is on the z-axis. however, it's important that it lies
     outside of the cube, i.e. that it's z coordinate > 1 */
@@ -56,6 +53,8 @@ public abstract class Polyhedron {
     Arrays.sort(faces);
     for( Face face : faces ){
       boolean visible = false;
+
+
 
       //determine if face is visible
 
@@ -73,9 +72,10 @@ public abstract class Polyhedron {
 
       //only if the visible flag is set to true do we go on and paint the face
       if(visible){
-
+        xpoints = new int[ face.number_of_vertices ];
+        ypoints = new int[ face.number_of_vertices ];
         //project all vertices of given face onto 2D space. Scaling factor is set to 100
-        for( int i=0; i<number_of_face_vertices; i++ ){
+        for( int i=0; i<face.number_of_vertices; i++ ){
           Point3D p = face.vertices[i];
 
           p.to_cartesian();
@@ -84,7 +84,7 @@ public abstract class Polyhedron {
           ypoints[i] = (int)( 100*p.y/( 1-(p.z/7) ) );
         }
         g2d.setPaint( face.color );
-        g2d.fill( new Polygon(xpoints, ypoints, number_of_face_vertices) );
+        g2d.fill( new Polygon(xpoints, ypoints, face.number_of_vertices) );
       }
     }
   }

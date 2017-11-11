@@ -1,0 +1,14 @@
+Tetrahedron
+1 #Type of Polyhedron
+4 #Number of vertices
+4 #Number of Faces
+Vertices
+1 0 -0.3333
+-0.5 0.8660 -0.3536
+-0.5 -0.8660 -0.3536
+0 0 1.0606
+Faces										
+0 2 1 3
+0 3 2 5
+0 1 3 6
+1 2 3 8

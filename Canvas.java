@@ -18,9 +18,16 @@ public class Canvas extends JPanel {
   public Canvas(){
     setPreferredSize(new Dimension(600,450));
 		setBackground(Color.black);
-    //octahedron = new Octahedron();
-    //dodecahedron = new Dodecahedron();
-    polyhedron = new SnubCube();
+    //polyhedron = new Cube();
+    //polyhedron = new Octahedron();
+    ///polyhedron = new Dodecahedron();
+    //polyhedron = new SnubCube();
+    //polyhedron = new Icosahedron();
+    //polyhedron = new GStellatedDodecahedron();
+    //polyhedron = new GreatIcosahedron();
+    polyhedron = new GreatDodecahedron();
+
+
   }
 
   public void paintComponent(Graphics g){

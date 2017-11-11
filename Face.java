@@ -5,9 +5,10 @@ Responsible for storing the necessary data of a face, i.e. its vertices and colo
 public class Face implements Comparable {
   Color color;
   Point3D[] vertices;
+  int number_of_vertices;
 
   public Face(int number_of_vertices, Color color, Point3D ... points ){
-
+    this.number_of_vertices = number_of_vertices;
     vertices = new Point3D[number_of_vertices+1];
 
     for(int i = 0; i < number_of_vertices; i++)
