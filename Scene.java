@@ -29,10 +29,15 @@ public class Scene {
     */
     public double get_point_brightness(double[] point_coordinates, double[] point_normal){
       double[] point_to_light_source_vector = Vector.normalize( Vector.subtract(point_light_source_position, point_coordinates) );
+      double[] point_to_camera_vector = Vector.normalize( Vector.subtract(camera_position, point_coordinates) );
+
       double[] normal = Vector.normalize(point_normal);
+      double[] w = Vector.scale( Vector.dotproduct(point_to_light_source_vector, normal), normal );
+      double[] reflected_vector = Vector.subtract( Vector.scale(2, w), point_to_light_source_vector );
+      //for specular
 
 
-      double brightness = 40 + 215 * eliminate_negatives( Vector.dotproduct(point_to_light_source_vector, normal) );
+      double brightness = ( 20 ) + ( 215 * eliminate_negatives( Vector.dotproduct(point_to_light_source_vector, normal) ) ) + 20 * Math.pow( Vector.dotproduct( reflected_vector, point_to_camera_vector ), 3 );
       return brightness;
     }
 
