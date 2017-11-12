@@ -87,10 +87,9 @@ public class AffineTransform3D {
       double s = Math.sin(theta);
       double ax = v[0]; double ay = v[1]; double az = v[2];
 
-      double[][] M = { { ( c+(1-c)*ax*ax ), ( (1-c)*ax*ay-s*az ), ( (1-c)*ax*az + s*ay ), 0 },
-        { (1-c)*ax*ay + s*az, c+(1-c)*ay*ay, (1-c)*ay*az - s*ax, 0 },
-        { (1-c)*ax*az - s*ay, (1-c)*ay*az + s*ax, c + (1-c)*az*az, 0 },
-        { 0, 0, 0, 1 }  };
+      double[][] M = { { ( c+(1-c)*ax*ax ), ( (1-c)*ax*ay-s*az ), ( (1-c)*ax*az + s*ay ) },
+        { (1-c)*ax*ay + s*az, c+(1-c)*ay*ay, (1-c)*ay*az - s*ax },
+        { (1-c)*ax*az - s*ay, (1-c)*ay*az + s*ax, c + (1-c)*az*az }};
 
       return M;
     }
