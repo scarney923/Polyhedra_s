@@ -29,7 +29,7 @@ public class Scene {
     */
     public double get_point_brightness(double[] point_coordinates, double[] point_normal){
       double[] point_to_light_source_vector = Vector.normalize( Vector.subtract(point_light_source_position, point_coordinates) );
-      double[] normal = Vector.normalize(point_coordinates);
+      double[] normal = Vector.normalize(point_normal);
 
 
       double brightness = 40 + 215 * eliminate_negatives( Vector.dotproduct(point_to_light_source_vector, normal) );
@@ -88,8 +88,6 @@ public class Scene {
 
         for( int i=0; i<face.number_of_vertices; i++ ){
           Point3D p = face.vertices[i];
-
-          p.to_cartesian();
 
           xpoints[i] = (int)( 100*p.x/( 1-(p.z/camera_position[2]) ) );
           ypoints[i] = (int)( 100*p.y/( 1-(p.z/camera_position[2]) ) );

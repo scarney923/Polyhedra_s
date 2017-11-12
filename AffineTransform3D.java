@@ -89,7 +89,7 @@ public class AffineTransform3D {
 
       double[][] M = { { ( c+(1-c)*ax*ax ), ( (1-c)*ax*ay-s*az ), ( (1-c)*ax*az + s*ay ) },
         { (1-c)*ax*ay + s*az, c+(1-c)*ay*ay, (1-c)*ay*az - s*ax },
-        { (1-c)*ax*az - s*ay, (1-c)*ay*az + s*ax, c + (1-c)*az*az }};
+        { (1-c)*ax*az - s*ay, (1-c)*ay*az + s*ax, c + (1-c)*az*az } };
 
       return M;
     }

@@ -21,7 +21,7 @@ public class Point3D{
   }
 
   public double[] to_vector(){
-    double[] v = new double[4];
+    double[] v = new double[3];
     v[0] = x;
     v[1] = y;
     v[2] = z;

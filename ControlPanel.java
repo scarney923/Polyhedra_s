@@ -165,7 +165,7 @@ class ControlPanel extends JPanel implements ActionListener {
       //the increment with which we rotate the dodecahedron
       double rotate_increment_temp = ccw.isSelected() ? rotate_increment : -rotate_increment;
 
-      double[] v = new double[4]; //stores the rotation axis
+      double[] v = new double[3]; //stores the rotation axis
       /*the ZERO VECTOR (0,0,0) does NOT count as an axis that can be rotated around
       which is why we need to make sure that it is an invalid input
       */
@@ -179,7 +179,6 @@ class ControlPanel extends JPanel implements ActionListener {
 
         v[i] = input;
       }
-      v[3] = 1.0; //set the (homogeneous) w component to 1.0
 
       if(valid_input_coordinates){
         scene.polyhedron.transform( AffineTransform3D.get_rotation_transform_arb(v, rotate_increment_temp ) );
@@ -188,7 +187,7 @@ class ControlPanel extends JPanel implements ActionListener {
       }
     }
 
-    
+
 
     canvas.repaint();
 
