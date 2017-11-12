@@ -4,75 +4,85 @@ import javax.swing.event.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.*;
+import java.io.File;
 
 /*
 Responsible for altering the state of a Canvas object and the dodecahedron it renders given user input
 */
 class ControlPanel extends JPanel implements ActionListener {
   Canvas canvas;
+  ArrayList<String> polyhedra_filenames;
+  JComboBox polyhedra_choices;
 
-  ButtonGroup btnGroup1;  //we use a ButtonGroup to make the buttons selection state mutually exclusive
-  JRadioButton wireframe;
-  JRadioButton colors;
+  JRadioButton[] rendering_options_buttons;
+  String[] rendering_options = { "wireframe", "colors", "shades", "shadows" };
 
-  ButtonGroup btnGroup2;
+  ButtonGroup btnGroup;
   JRadioButton ccw;
   JRadioButton cw;
+  JTextField[] rotation_axis_cooardines;
+  JButton rotate;
 
-  JButton[] axis_buttons;
-  String[] axis_labels = {"x-axis", "y-axis", "z-axis", "arbitrary axis"};
-  JSlider[] vector_components;
+
+  JButton render;
+  JButton inspect;
+
 
   public ControlPanel(Canvas canvas){
     this.canvas = canvas;
+    polyhedra_filenames = new ArrayList<String>();
+    read_in_filenames();
+
+
+
+
+    //Create the combo box, select item at index 4.
+    //Indices start at 0, so 4 specifies the pig.
+    polyhedra_choices = new JComboBox(polyhedra_filenames.toArray());
+    polyhedra_choices.setSelectedIndex(0);
+    polyhedra_choices.addActionListener(this);
+    add(polyhedra_choices);
+
+    render = new JButton("Render Polyhedron");
+    render.addActionListener(this);
+    add(render);
+
+
     setPreferredSize(new Dimension(400,500));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-    btnGroup1 = new ButtonGroup();
-    wireframe = new JRadioButton("Wireframe", true);
-    wireframe.addActionListener(this);
-    btnGroup1.add(wireframe);
-    add(wireframe);
-    colors = new JRadioButton("Colors");
-    colors.addActionListener(this);
-    btnGroup1.add(colors);
-    add(colors);
+    rendering_options_buttons = new JRadioButton[4];
+    for(int i =0; i<4; i++){
+      rendering_options_buttons[i] = new JRadioButton(rendering_options[i], true);
+      rendering_options_buttons[i].addActionListener(this);
+      add(rendering_options_buttons[i]);
+    }
 
-    btnGroup2 = new ButtonGroup();
+
+    add(new JLabel("Rotate"));
+    btnGroup = new ButtonGroup();
     ccw = new JRadioButton("Counter Clockwise", true);
-    btnGroup2.add(ccw);
+    btnGroup.add(ccw);
     add(ccw);
     cw = new JRadioButton("Clockwise");
-    btnGroup2.add(cw);
+    btnGroup.add(cw);
     add(cw);
 
-    //create and add buttons for rotating around Cartesian coordinate axes
-    axis_buttons = new JButton[4];
-    JPanel coord_axis = new JPanel();
-    coord_axis.setLayout(new BoxLayout(coord_axis, BoxLayout.X_AXIS));
-    for(int i = 0; i < 3; i++){
-      axis_buttons[i] = new JButton(axis_labels[i]);
-      axis_buttons[i].addActionListener(this);
-      coord_axis.add(axis_buttons[i]);
+    JPanel coords = new JPanel();
+    coords.setLayout(new GridLayout(1,3,30,10));
+    rotation_axis_cooardines = new JTextField[3];
+    for(int i =0; i<3; i++){
+      rotation_axis_cooardines[i] = new JTextField("0");
+      coords.add(rotation_axis_cooardines[i]);
     }
-    add(coord_axis);
+    add(coords);
+    rotate = new JButton("rotate");
+    rotate.addActionListener(this);
+    add(rotate);
 
-    //create and add button and accompanying sliders for rotating around arbitrary axis
-    JPanel arb_axis = new JPanel();
-    arb_axis.setLayout(new BoxLayout(arb_axis, BoxLayout.X_AXIS));
-    axis_buttons[3] = new JButton(axis_labels[3]);
-    axis_buttons[3].addActionListener(this);
-    arb_axis.add(axis_buttons[3]);
-    vector_components = new JSlider[3];
-    for(int i = 0; i<3; i++){
-			vector_components[i] = new JSlider(JSlider.VERTICAL,-10,10,0);
-      vector_components[i].setMajorTickSpacing(1);
-      vector_components[i].setPaintTicks(true);
-      vector_components[i].setPaintLabels(true);
-			arb_axis.add( vector_components[i] );
-		}
-    add(arb_axis);
 
+    inspect = new JButton("Inspect Polyhedron");
+    add(inspect);
 
 
   }
@@ -80,16 +90,33 @@ class ControlPanel extends JPanel implements ActionListener {
 
 
   public void actionPerformed(ActionEvent evt){
+    if(evt.getSource() == render){
+      canvas.polyhedron = new Polyhedron("./polyhedra_data/" + polyhedra_choices.getSelectedItem());
+      canvas.scene.set_polyhedron(canvas.polyhedron);
+      System.out.println(polyhedra_choices.getSelectedItem());
+
+    }
+
     //determine drawing mode: wireframe our colored faces
-    if( wireframe.isSelected() )
+    if( rendering_options_buttons[0].isSelected() )
       canvas.wireframe = true;
     else
       canvas.wireframe = false;
 
-    if( colors.isSelected() )
+    if( rendering_options_buttons[1].isSelected() )
       canvas.colors = true;
     else
       canvas.colors = false;
+    if( rendering_options_buttons[2].isSelected() )
+      canvas.shades = true;
+    else
+      canvas.shades = false;
+
+    if( rendering_options_buttons[3].isSelected() )
+      canvas.shadows = true;
+    else
+      canvas.shadows = false;
+
 
 
     //the increment with which we rotate the dodecahedron
@@ -100,16 +127,8 @@ class ControlPanel extends JPanel implements ActionListener {
       rotate_increment = (-1) * rotate_increment;
 
     //rotate dodecahedron according to input
-    if(evt.getSource() == axis_buttons[0]){
-      canvas.polyhedron.transform( AffineTransform3D.get_rotation_transform_xaxis( rotate_increment ) );
-    }
-    if(evt.getSource() == axis_buttons[1]){
-      canvas.polyhedron.transform( AffineTransform3D.get_rotation_transform_yaxis( rotate_increment ) );
-    }
-    if(evt.getSource() == axis_buttons[2]){
-      canvas.polyhedron.transform( AffineTransform3D.get_rotation_transform_zaxis( rotate_increment ) );
-    }
-    if(evt.getSource() == axis_buttons[3]){
+
+    if( evt.getSource() == rotate ){
 
       double[] v = new double[4]; //stores the rotation axis
       /*the ZERO VECTOR (0,0,0) does NOT count as an axis that can be rotated around
@@ -118,7 +137,7 @@ class ControlPanel extends JPanel implements ActionListener {
       boolean valid_input_coordinates = false;
 
       for(int i=0; i<3; i++){
-        double input = (double) vector_components[i].getValue(); //get input from slider
+        double input = Double.parseDouble(rotation_axis_cooardines[i].getText());
 
         if( input != 0 ) //if value is not zero, then we set the valid input flag to 'true'
           valid_input_coordinates = true;
@@ -134,6 +153,16 @@ class ControlPanel extends JPanel implements ActionListener {
     canvas.repaint();
 
 
+  }
+
+  public void read_in_filenames(){
+    File folder = new File("./polyhedra_data");
+    File[] list_of_files = folder.listFiles();
+
+    for (int i = 0; i < list_of_files.length; i++) {
+      if ( list_of_files[i].isFile() )
+        polyhedra_filenames.add( list_of_files[i].getName() );
+    }
   }
 
 

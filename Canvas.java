@@ -4,28 +4,29 @@ import java.awt.geom.*;
 import java.util.*;
 
 /*
-Responsible for rendering the octahedron on screen.
+Responsible for rendering the polyhedron on screen.
 */
 
 public class Canvas extends JPanel {
-  //Octahedron octahedron;
-  //Dodecahedron dodecahedron;
-  Polyhedron polyhedron;
 
+  Polyhedron polyhedron;
+  Scene scene;
   boolean wireframe = true;
   boolean colors = false;
+  boolean shades = false;
+  boolean shadows = false;
+
 
   public Canvas(){
     setPreferredSize(new Dimension(600,450));
 		setBackground(Color.black);
-    //polyhedron = new Cube();
-    //polyhedron = new Octahedron();
-    ///polyhedron = new Dodecahedron();
-    //polyhedron = new SnubCube();
-    //polyhedron = new Icosahedron();
-    //polyhedron = new GStellatedDodecahedron();
-    //polyhedron = new GreatIcosahedron();
-    polyhedron = new GreatDodecahedron();
+    polyhedron = new Polyhedron("./polyhedra_data/Cube.txt");
+    double[] point_light_source_position = {0.0,0.0,1000.0};
+    //point_light_source_position = new double[3] {0,0,1000};
+    double[] camera_position = {0.0,0.0,10.0};
+    //camera_position = new double[3] {0,0,10};
+
+    scene = new Scene(polyhedron, camera_position, point_light_source_position);
 
 
   }
@@ -37,9 +38,13 @@ public class Canvas extends JPanel {
 		g2d.translate(getWidth()/2,getHeight()/2);
     g2d.scale(1,-1);
     if(colors) //draw colored octahedron?
-      polyhedron.draw_colored(g2d);
+      scene.draw_colored(g2d);
     if(wireframe) //draw wirefire?
-      polyhedron.draw_wireframe(g2d);
+      scene.draw_wireframe(g2d);
+    if(shades) //draw colored octahedron?
+      scene.draw_shades(g2d);
+    //if(wireframe)
+    //    scene.draw_wireframe(g2d);
 
 
   }

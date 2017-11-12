@@ -6,6 +6,8 @@ public class Face implements Comparable {
   Color color;
   Point3D[] vertices;
   int number_of_vertices;
+  double[] normal;
+  boolean is_visible;
 
   public Face(int number_of_vertices, Color color, Point3D ... points ){
     this.number_of_vertices = number_of_vertices;
@@ -19,6 +21,8 @@ public class Face implements Comparable {
 
 
   }
+
+
 
   @Override
   public int compareTo(Object other_face) {
@@ -35,9 +39,9 @@ public class Face implements Comparable {
       /* For Ascending order*/
       double result = z_cummulative/vertices.length - other_z_cummulative/vertices.length ;
       if( result > 0 )
-        return -1;
-      if( result < 0 )
         return 1;
+      if( result < 0 )
+        return -1;
       return 0;
 
 
