@@ -6,16 +6,15 @@ import java.io.IOException;
 
 
 
-public class PolyhedronGenerator {
+public class PolyDataFileParser {
 
   private Path fFilePath;
   private Scanner scanner;
 
-  private static Color[] colors;
 
 
 
-  public PolyhedronGenerator(String aFileName){
+  public PolyDataFileParser(String aFileName){
     fFilePath = Paths.get(aFileName);
     try{
       scanner =  new Scanner(fFilePath);
@@ -23,17 +22,6 @@ public class PolyhedronGenerator {
 
     }
 
-    colors = new Color[10];
-    colors[0] = Color.BLUE;
-    colors[1] = Color.CYAN;
-    colors[2] = Color.GRAY;
-    colors[3] = Color.GREEN;
-    colors[4] = Color.MAGENTA;
-    colors[5] = Color.ORANGE;
-    colors[6] = Color.WHITE;
-    colors[7] = Color.RED;
-    colors[8] = Color.LIGHT_GRAY;
-    colors[9] = Color.YELLOW;
   }
 
 
@@ -94,7 +82,7 @@ public class PolyhedronGenerator {
            face_vertices[ k ] = new Point3D( vertices[which_vertice]);
         }
       color_number = Integer.parseInt( tokens[ number_of_face_vertices ] ); //
-      faces[ i ] = new Face( number_of_face_vertices, colors[ color_number ], face_vertices );
+      faces[ i ] = new Face( number_of_face_vertices, color_number, face_vertices );
     }
     return faces;
   }

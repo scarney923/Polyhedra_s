@@ -3,13 +3,16 @@ import java.awt.Color;
 Responsible for storing the necessary data of a face, i.e. its vertices and color.
 */
 public class Face implements Comparable {
-  Color color;
+  int color_number;
   Point3D[] vertices;
   int number_of_vertices;
   double[] normal;
   boolean is_visible;
+  int[] x_coords_projected;
+  int[] y_coords_projected;
 
-  public Face(int number_of_vertices, Color color, Point3D ... points ){
+
+  public Face(int number_of_vertices, int color_number, Point3D ... points ){
     this.number_of_vertices = number_of_vertices;
     vertices = new Point3D[number_of_vertices+1];
 
@@ -17,7 +20,7 @@ public class Face implements Comparable {
       vertices[i] = points[i];
 
     vertices[number_of_vertices] = vertices[0];
-    this.color = color;
+    this.color_number = color_number;
 
 
   }

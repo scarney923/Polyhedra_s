@@ -5,23 +5,35 @@ public class Main
 {
 
     public static void main(String[] args){
-		JFrame frame = new JFrame();
-		frame.setSize(800,600);
+
+    JFrame frame = new JFrame();
+    JFrame cp_frame = new JFrame();
+
+
+		cp_frame.setSize(500,600);
 
 		//Sets the window to close when upper right corner clicked.
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setTitle("Rotate Cube");
+    frame.setTitle("Polyhedra Fun");
 
-    Canvas canvas = new Canvas();
-    ControlPanel controlPanel = new ControlPanel(canvas);
-    Container container = frame.getContentPane();
-    container.setLayout(new BorderLayout());
-    container.add(canvas, BorderLayout.CENTER);
-    container.add(controlPanel, BorderLayout.EAST);
+    cp_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    cp_frame.setTitle("Controls");
 
-		frame.pack();
-		frame.setResizable(true);
+    Scene scene = new Scene();
+    Renderer canvas = new Renderer(scene);
+    ControlPanel controlPanel = new ControlPanel(canvas, scene);
+
+    frame.add(canvas);
+    cp_frame.add(controlPanel);
+
+
+		//frame.pack();
+		//frame.setResizable(true);
+    frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+
 		frame.setVisible(true);
+    cp_frame.setVisible(true);
+
 
     }
 } // Main

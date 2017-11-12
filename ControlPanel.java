@@ -10,12 +10,22 @@ import java.io.File;
 Responsible for altering the state of a Canvas object and the dodecahedron it renders given user input
 */
 class ControlPanel extends JPanel implements ActionListener {
-  Canvas canvas;
+  Renderer canvas;
+  Scene scene;
+
+  //rendering control
+  JRadioButton[] rendering_options_buttons;
+  String[] rendering_options = { "Wireframe", "Colors", "Shades", "Shadows" };
+
+  //scene modifications
   ArrayList<String> polyhedra_filenames;
   JComboBox polyhedra_choices;
 
-  JRadioButton[] rendering_options_buttons;
-  String[] rendering_options = { "wireframe", "colors", "shades", "shadows" };
+  JTextField[] camera_coordinates;
+  JTextField[] light_source_coordinates;
+
+  JButton render;
+
 
   ButtonGroup btnGroup;
   JRadioButton ccw;
@@ -23,43 +33,66 @@ class ControlPanel extends JPanel implements ActionListener {
   JTextField[] rotation_axis_cooardines;
   JButton rotate;
 
+  //the increment with which we rotate the dodecahedron
+  final double rotate_increment = Math.toRadians(10);
 
-  JButton render;
-  JButton inspect;
+  JButton bigger;
+  JButton smaller;
 
 
-  public ControlPanel(Canvas canvas){
+
+  public ControlPanel(Renderer canvas, Scene scene){
     this.canvas = canvas;
+    this.scene = scene;
+
+    setPreferredSize(new Dimension(400,500));
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+
     polyhedra_filenames = new ArrayList<String>();
     read_in_filenames();
 
-
-
-
-    //Create the combo box, select item at index 4.
-    //Indices start at 0, so 4 specifies the pig.
     polyhedra_choices = new JComboBox(polyhedra_filenames.toArray());
     polyhedra_choices.setSelectedIndex(0);
-    polyhedra_choices.addActionListener(this);
     add(polyhedra_choices);
+
+    add(new JLabel("Show..."));
+    rendering_options_buttons = new JRadioButton[4];
+    for(int i =0; i<4; i++){
+      rendering_options_buttons[i] = new JRadioButton(rendering_options[i], false);
+      add(rendering_options_buttons[i]);
+    }
+    rendering_options_buttons[0].setSelected(true);
+
+    add(new JLabel("Set Camera Position"));
+    JPanel camera_coords_panel = new JPanel();
+    camera_coords_panel.setLayout(new BoxLayout(camera_coords_panel, BoxLayout.X_AXIS));
+    camera_coordinates = new JTextField[3];
+    camera_coordinates[0] = new JTextField("0.0");
+    camera_coordinates[1] = new JTextField("0.0");
+    camera_coordinates[2] = new JTextField("10.0");
+    for(int i =0; i<3; i++)
+      camera_coords_panel.add(camera_coordinates[i]);
+    add(camera_coords_panel);
+
+    add(new JLabel("Set Light Source Position"));
+    JPanel light_coords_panel = new JPanel();
+    light_coords_panel.setLayout(new BoxLayout(light_coords_panel, BoxLayout.X_AXIS));
+    light_source_coordinates = new JTextField[3];
+    light_source_coordinates[0] = new JTextField("0.0");
+    light_source_coordinates[1] = new JTextField("0.0");
+    light_source_coordinates[2] = new JTextField("1000.0");
+    for(int i =0; i<3; i++)
+      light_coords_panel.add(light_source_coordinates[i]);
+    add(light_coords_panel);
 
     render = new JButton("Render Polyhedron");
     render.addActionListener(this);
     add(render);
 
+    add(new JLabel("Operations"));
 
-    setPreferredSize(new Dimension(400,500));
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-    rendering_options_buttons = new JRadioButton[4];
-    for(int i =0; i<4; i++){
-      rendering_options_buttons[i] = new JRadioButton(rendering_options[i], true);
-      rendering_options_buttons[i].addActionListener(this);
-      add(rendering_options_buttons[i]);
-    }
-
-
-    add(new JLabel("Rotate"));
+    add(new JLabel("Rotate Polyhedron"));
     btnGroup = new ButtonGroup();
     ccw = new JRadioButton("Counter Clockwise", true);
     btnGroup.add(ccw);
@@ -80,9 +113,16 @@ class ControlPanel extends JPanel implements ActionListener {
     rotate.addActionListener(this);
     add(rotate);
 
+    add(new JLabel("Scale Polyhedron"));
+    bigger = new JButton("Bigger");
+    bigger.addActionListener(this);
+    add(bigger);
+    smaller = new JButton("Smaller");
+    smaller.addActionListener(this);
+    add(smaller);
 
-    inspect = new JButton("Inspect Polyhedron");
-    add(inspect);
+
+
 
 
   }
@@ -90,45 +130,40 @@ class ControlPanel extends JPanel implements ActionListener {
 
 
   public void actionPerformed(ActionEvent evt){
+
+
+
     if(evt.getSource() == render){
-      canvas.polyhedron = new Polyhedron("./polyhedra_data/" + polyhedra_choices.getSelectedItem());
-      canvas.scene.set_polyhedron(canvas.polyhedron);
-      System.out.println(polyhedra_choices.getSelectedItem());
+      scene.polyhedron = new Polyhedron( "./polyhedra_data/" + polyhedra_choices.getSelectedItem() );
+
+      canvas.wireframe = rendering_options_buttons[0].isSelected();
+      canvas.colors = rendering_options_buttons[1].isSelected();
+      canvas.shades = rendering_options_buttons[2].isSelected();
+      canvas.shadows = rendering_options_buttons[3].isSelected();
+
+      for(int i=0; i<3; i++)
+        scene.camera_position[i] = Double.parseDouble( camera_coordinates[i].getText() );
+
+
+      for(int i=0; i<3; i++)
+        scene.point_light_source_position[i] = Double.parseDouble( light_source_coordinates[i].getText() );
+
+
+      scene.set_visiblity_flags();
+      scene.set_projection();
 
     }
 
-    //determine drawing mode: wireframe our colored faces
-    if( rendering_options_buttons[0].isSelected() )
-      canvas.wireframe = true;
-    else
-      canvas.wireframe = false;
-
-    if( rendering_options_buttons[1].isSelected() )
-      canvas.colors = true;
-    else
-      canvas.colors = false;
-    if( rendering_options_buttons[2].isSelected() )
-      canvas.shades = true;
-    else
-      canvas.shades = false;
-
-    if( rendering_options_buttons[3].isSelected() )
-      canvas.shadows = true;
-    else
-      canvas.shadows = false;
 
 
 
-    //the increment with which we rotate the dodecahedron
-    double rotate_increment = Math.toRadians(5);
 
-    //if clockwise, then we rotate by a negative angle
-    if( cw.isSelected() )
-      rotate_increment = (-1) * rotate_increment;
 
-    //rotate dodecahedron according to input
+
 
     if( evt.getSource() == rotate ){
+      //the increment with which we rotate the dodecahedron
+      double rotate_increment_temp = ccw.isSelected() ? rotate_increment : -rotate_increment;
 
       double[] v = new double[4]; //stores the rotation axis
       /*the ZERO VECTOR (0,0,0) does NOT count as an axis that can be rotated around
@@ -146,16 +181,22 @@ class ControlPanel extends JPanel implements ActionListener {
       }
       v[3] = 1.0; //set the (homogeneous) w component to 1.0
 
-      if(valid_input_coordinates) //if all three input coordinates were 0, then the flag was never set to true
-        canvas.polyhedron.transform( AffineTransform3D.get_rotation_transform_arb(v, rotate_increment ) );
+      if(valid_input_coordinates){
+        scene.polyhedron.transform( AffineTransform3D.get_rotation_transform_arb(v, rotate_increment_temp ) );
+        scene.set_visiblity_flags();
+        scene.set_projection();
+      }
     }
+
+    
 
     canvas.repaint();
 
 
   }
 
-  public void read_in_filenames(){
+  //MAKE STATIC?
+  private void read_in_filenames(){
     File folder = new File("./polyhedra_data");
     File[] list_of_files = folder.listFiles();
 

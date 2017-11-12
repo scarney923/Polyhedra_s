@@ -12,7 +12,7 @@ public class Polyhedron {
   //constructor
   public Polyhedron(String filepath){
 
-    PolyhedronGenerator reader = new PolyhedronGenerator( filepath );
+    PolyDataFileParser reader = new PolyDataFileParser( filepath );
     name = reader.get_polyhedron_name();
     number_of_vertices = reader.get_number_of_vertices();
     number_of_faces = reader.get_number_of_faces();
@@ -25,6 +25,6 @@ public class Polyhedron {
         face.vertices[i].apply_transform(M);
   }
 
-  
+
 
 }
