@@ -29,6 +29,15 @@ public class Vector{
 
     return v;
   }
+
+  public static double[] scale(double scalar, double[] v){
+    double[] v_scaled = new double[v.length];
+    for(int i=0; i<v.length; i++)
+      v_scaled[i] = scalar*v[i];
+
+    return v_scaled;
+  }
+
   public static double[] normalize(double[] v) {
       double[] normalized = new double[v.length];
       double vector_length = get_norm(v);
