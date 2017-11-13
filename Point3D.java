@@ -20,7 +20,7 @@ public class Point3D{
     this.z=coords[2];
   }
 
-  public double[] to_vector(){
+  public double[] get_vector_form(){
     double[] v = new double[3];
     v[0] = x;
     v[1] = y;
@@ -29,7 +29,7 @@ public class Point3D{
   }
 
   public void apply_transform(double[][] M) {
-      double[] v0 = this.to_vector();
+      double[] v0 = this.get_vector_form();
       double[] v = Vector.apply_transform( v0 , M );
       x = v[0];
       y = v[1];

@@ -10,6 +10,7 @@ public class Face implements Comparable {
   boolean is_visible;
   int[] x_coords_projected;
   int[] y_coords_projected;
+  Area shadow;
 
 
   public Face(int number_of_vertices, int color_number, Point3D ... points ){

@@ -91,7 +91,7 @@ public class Renderer extends JPanel {
     for( Face face : scene.polyhedron.faces ){
       if(face.is_visible){
 
-        double brightness = scene.get_point_brightness( face.vertices[0].to_vector(), face.normal );
+        double brightness = scene.get_point_brightness( face.vertices[0].get_vector_form(), face.normal );
         //Color shaded_face_color = new Color(brightness,brightness,brightness);
 
         int red, green, blue;
@@ -117,7 +117,14 @@ public class Renderer extends JPanel {
   }
 
   public void show_shadows(Graphics2D g2d){
-    System.out.println("show shadows");
+    for( Face face : scene.polyhedron.faces ){
+      Color un_shaded = colors_map[ face.color_number ]
+      Color shaded = new Color ( un_shaded.getRed() - 20, un_shaded.getGreen() - 20, un_shaded.getBlue() - 20 );
+      g2d.setPaint( shaded );
+      g2d.fill( face.shadow );
+    }
+
+
   }
 
 
