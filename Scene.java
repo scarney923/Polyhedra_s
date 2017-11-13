@@ -30,14 +30,29 @@ public class Scene {
     for ( int i = polyhedron.number_of_faces-1; i > -1; i-- )
       if ( polyhedron.faces[i].is_visible ){
         for( int j = i; j > -1; j-- ){
-          //get explicit vector form of plane (n . (P - Q) = 0)
+
+          Point3D Q = polyhedron.faces[j].vertices[0];
+          double[] n = polyhedron.faces[j].normal;
+          double[] L = point_light_source_position;
+          double A = Vector.dotproduct(n, L);
+          double B = Vector.dotproduct(n, Q);
           Point3D[] shadows_vertices = new Point3D[ polyhedron.faces[i].number_of_vertices ];
-          //L + tv <--- v is direction vector from L to vertex
-          //use formula 9.22 to obtain projected vertex on plane of polyhedron.faces[j]
-          for( Point3D vertex : polyhedron.faces[i].vertices){
-            double[][] M =
-            shadows_vertices[ k ] = ( Vector.apply_transform(vertex.get_vector_form(), M) );
+
+          double[][] M = { { L[0]*n[0] - A + B, L[0]*n[1],         L[0]*n[2],         (-1)*L[0]*B },
+                           { L[1]*n[0],         L[1]*n[1] - A + B, L[1]*n[2],         (-1)*L[1]*B },
+                           { L[2]*n[0],         L[2]*n[1],         L[2]*n[2] - A + B, (-1)*L[2]*B },
+                           { n[0],              n[1],              n[3],               -A         } };
+
+
+          //for( Point3D vertex : polyhedron.faces[i].vertices){
+          for(int k = 0; k < shadows_vertices.length; k++){
+            Point3D vertex = polyhedron.faces[i].vertices[k];
+            double[] shadow_vertice_homogeneous = ( Vector.apply_transform(vertex.get_homogeneous_vector_form(), M) );
+            shadows_vertices[ k ] = Vector.get_Point3D_from_homogeneous(shadow_vertice_homogeneous);
+
           }
+
+
 
           int shadow_projection_xcoords = new int[ shadows_vertices.length ];
           int shadow_projection_ycoords = new int[ shadows_vertices.length ];
@@ -54,6 +69,8 @@ public class Scene {
 
         }
       }
+    //step 1: transform space back
+
   }
 
 

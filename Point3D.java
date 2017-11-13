@@ -28,6 +28,15 @@ public class Point3D{
     return v;
   }
 
+  public double[] get_homogeneous_vector_form(){
+    double[] v = new double[4];
+    v[0] = x;
+    v[1] = y;
+    v[2] = z;
+    v[3] = 1;
+    return v;
+  }
+
   public void apply_transform(double[][] M) {
       double[] v0 = this.get_vector_form();
       double[] v = Vector.apply_transform( v0 , M );

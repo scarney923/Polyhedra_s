@@ -12,6 +12,23 @@ public class Vector{
       }
       return dot;
   }
+
+  public static double[] get_cartesian_from_homogeneous(double[] homogeneous_v){
+    double[] cartesian_v = new double[homogeneous_v.length-1];
+    for(int i=0; i<cartesian_v.length; i++)
+      cartesian_v[i] = homogeneous_v[i]/homogeneous_v[homogeneous_v.length-1];
+
+    return cartesian_v;
+  }
+
+  public static Point3D get_Point3D_from_homogeneous(double[] homogeneous_v){
+    Point3D cartesian_point = new double[3];
+    cartesian_point.x = homogeneous_v[0]/homogeneous_v[3];
+    cartesian_point.y = homogeneous_v[1]/homogeneous_v[3];
+    cartesian_point.z = homogeneous_v[2]/homogeneous_v[3];
+
+    return cartesian_point;
+  }
   /*
   This method is specific to 3 dimensional vectors and should be generalized to work for
   vectors of any size.
