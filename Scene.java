@@ -45,7 +45,7 @@ public class Scene {
     for ( int i = polyhedron.number_of_faces-1; i > -1; i-- )
       if ( polyhedron.faces[i].is_visible ){
       //TODO change for loop to ascending
-        for( int j = i; j > -1; j-- ){
+        for( int j = 0; j < i; j++ ){
 
           Point3D Q = polyhedron.faces[j].vertices[0];
           double[] Q_v = Q.get_vector_form();
