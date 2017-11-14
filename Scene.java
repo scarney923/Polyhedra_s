@@ -22,21 +22,25 @@ public class Scene {
   TODO: do we need to make light source in the exact same position as camera?
   */
   public void set_shadows(){
-    boolean isTransformed = false; 
-    double thetaY = 0; 
-    double thetaX = 0; 
-    
-    
+    boolean isTransformed = false;
+    double thetaY = 0;
+    double thetaX = 0;
+
+
     if(point_light_source_position[0] != 0 && point_light_source_position[1] != 0){
-      double[] unitLightSource = Vector.normalize(point_light_source_position); 
-      double[] zAxis = {0, 0, 1}; 
+      double[] unitLightSource = Vector.normalize(point_light_source_position);
+      double[] zAxis = {0, 0, 1};
       thetaY = Math.toRadians(Math.acos(Vector.dotproduct(point_light_source_position, zAxis)/Vector.get_norm(point_light_source_position)));
-      polyhedron.transform( AffineTransform3D.get_rotation_transform_yaxis(thetaY));
-      double[] tempLightLoc0 = {point_light_source_position[0], 0, point_light_source_position[2]};  
+      double[] tempLightLoc0 = {point_light_source_position[0], 0, point_light_source_position[2]};
       thetaX =  Math.toRadians(Math.acos(Vector.dotproduct(tempLightLoc0, zAxis)/Vector.get_norm(tempLightLoc0)));
-      polyhedron.transform( AffineTransform3D.get_rotation_transform_xaxis(thetaX)); 
-      double[] tempLightLoc1 = {0, 0, point_light_source_position[2]};   
-      isTransformed = true; 
+      double[][] M = AffineTransform3D.multiply(AffineTransform3D.get_rotation_transform_yaxis(thetaY), AffineTransform3D.get_rotation_transform_xaxis(thetaX));
+      polyhedron.transform( M );
+      Vector.apply_transform(point_light_source_position, M);
+      for(int i =0; i< 3; i++)
+        System.out.println(point_light_source_position[i]);
+
+      double[] tempLightLoc1 = {0, 0, point_light_source_position[2]};
+      isTransformed = true;
     }
     //step 2: set visiblity flags (should already be set)
 
@@ -81,15 +85,15 @@ public class Scene {
           Area shadow_area = new Area( new Polygon( shadow_projection_xcoords, shadow_projection_ycoords, shadows_vertices.length ) );
           Area face_area = new Area( new Polygon( polyhedron.faces[j].x_coords_projected, polyhedron.faces[j].y_coords_projected, polyhedron.faces[j].number_of_vertices ) );
           face_area.intersect(shadow_area);
-          polyhedron.faces[j].shadow = shadow_area; 
+          polyhedron.faces[j].shadow = shadow_area;
 
         }
-        
+
           if(isTransformed){
           thetaX = Math.toRadians(-1*thetaX);
           polyhedron.transform( AffineTransform3D.get_rotation_transform_xaxis(thetaX));
           thetaY = Math.toRadians(-1*thetaY);
-          polyhedron.transform( AffineTransform3D.get_rotation_transform_xaxis(thetaY)); 
+          polyhedron.transform( AffineTransform3D.get_rotation_transform_xaxis(thetaY));
           }
         }
 
