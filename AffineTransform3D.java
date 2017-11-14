@@ -52,10 +52,9 @@ public class AffineTransform3D {
     */
     public static double[][] get_rotation_transform_zaxis(double theta){
       double[][] M = {
-        { Math.cos(theta), -Math.sin(theta), 0, 0 },
-        { Math.sin(theta), Math.cos(theta), 0, 0 },
-        { 0, 0, 1, 0 },
-        { 0, 0, 0, 1 } };
+        { Math.cos(theta), -Math.sin(theta), 0, },
+        { Math.sin(theta), Math.cos(theta), 0 },
+        { 0, 0, 1 }};
 
       return M;
     }
@@ -65,11 +64,9 @@ public class AffineTransform3D {
     */
     public static double[][] get_rotation_transform_yaxis(double theta){
       double[][] M = {
-        { Math.cos(theta), 0, Math.sin(theta), 0 },
+        { Math.cos(theta), 0, Math.sin(theta) },
         { 0, 1, 0, 0 },
-        { -Math.sin(theta), 0, Math.cos(theta), 0 },
-        { 0, 0, 0, 1 } };
-
+        { -Math.sin(theta), 0, Math.cos(theta) }};
       return M;
     }
 
@@ -78,10 +75,9 @@ public class AffineTransform3D {
     */
     public static double[][] get_rotation_transform_xaxis(double theta){
       double[][] M = {
-        { 1, 0, 0, 0 },
-        { 0, Math.cos(theta), -Math.sin(theta), 0 },
-        { 0, Math.sin(theta), Math.cos(theta), 0 },
-        { 0, 0, 0, 1 } };
+        { 1, 0, 0 },
+        { 0, Math.cos(theta), -Math.sin(theta) },
+        { 0, Math.sin(theta), Math.cos(theta) }};
 
       return M;
     }

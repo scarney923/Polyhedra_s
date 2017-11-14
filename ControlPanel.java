@@ -80,7 +80,7 @@ class ControlPanel extends JPanel implements ActionListener {
     light_coords_panel.setLayout(new BoxLayout(light_coords_panel, BoxLayout.X_AXIS));
     light_source_coordinates = new JTextField[3];
     light_source_coordinates[0] = new JTextField("0.0");
-    light_source_coordinates[1] = new JTextField("0.0");
+    light_source_coordinates[1] = new JTextField("500.0");
     light_source_coordinates[2] = new JTextField("1000.0");
     for(int i =0; i<3; i++)
       light_coords_panel.add(light_source_coordinates[i]);

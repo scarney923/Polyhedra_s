@@ -12,7 +12,7 @@ public class Scene {
   public Scene(){
     this.polyhedron = new Polyhedron("./polyhedra_data/Cube.txt");;
     this.camera_position = new double[] {0.0,0.0,10.0};
-    this.point_light_source_position = new double[] {0.0,0.0,1000.0};
+    this.point_light_source_position = new double[] {0.0,500.0,1000.0};
     set_visiblity_flags();
     set_projection();
 
@@ -27,17 +27,17 @@ public class Scene {
     double thetaX = 0;
 
 
-    if(point_light_source_position[0] != 0 && point_light_source_position[1] != 0){
+    if(point_light_source_position[0] != 0 || point_light_source_position[1] != 0){
       double[] unitLightSource = Vector.normalize(point_light_source_position);
       double[] zAxis = {0, 0, 1};
       thetaY = Math.toRadians(Math.acos(Vector.dotproduct(point_light_source_position, zAxis)/Vector.get_norm(point_light_source_position)));
       double[] tempLightLoc0 = {point_light_source_position[0], 0, point_light_source_position[2]};
       thetaX =  Math.toRadians(Math.acos(Vector.dotproduct(tempLightLoc0, zAxis)/Vector.get_norm(tempLightLoc0)));
-      double[][] M = AffineTransform3D.multiply(AffineTransform3D.get_rotation_transform_yaxis(thetaY), AffineTransform3D.get_rotation_transform_xaxis(thetaX));
+      double[][] M = AffineTransform3D.multiply(AffineTransform3D.get_rotation_transform_yaxis(thetaX), AffineTransform3D.get_rotation_transform_xaxis(thetaY));
       polyhedron.transform( M );
-      Vector.apply_transform(point_light_source_position, M);
+      double[] blah = Vector.apply_transform(point_light_source_position, M);
       for(int i =0; i< 3; i++)
-        System.out.println(point_light_source_position[i]);
+        System.out.println("PLC" + blah[i]);
 
       double[] tempLightLoc1 = {0, 0, point_light_source_position[2]};
       isTransformed = true;
