@@ -155,12 +155,6 @@ class ControlPanel extends JPanel implements ActionListener {
     }
 
 
-
-
-
-
-
-
     if( evt.getSource() == rotate ){
       //the increment with which we rotate the dodecahedron
       double rotate_increment_temp = ccw.isSelected() ? rotate_increment : -rotate_increment;

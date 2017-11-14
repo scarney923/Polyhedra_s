@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.geom.*;
 /*
 Responsible for storing the necessary data of a face, i.e. its vertices and color.
 */

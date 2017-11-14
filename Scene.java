@@ -22,26 +22,43 @@ public class Scene {
   TODO: do we need to make light source in the exact same position as camera?
   */
   public void set_shadows(){
-    //step 1: transform space such that the light source coincides with camera (z-axis)
-
+    boolean isTransformed = false; 
+    double thetaY = 0; 
+    double thetaX = 0; 
+    
+    
+    if(point_light_source_position[0] != 0 && point_light_source_position[1] != 0){
+      double[] unitLightSource = Vector.normalize(point_light_source_position); 
+      double[] zAxis = {0, 0, 1}; 
+      thetaY = Math.toRadians(Math.acos(Vector.dotproduct(point_light_source_position, zAxis)/Vector.get_norm(point_light_source_position)));
+      polyhedron.transform( AffineTransform3D.get_rotation_transform_yaxis(thetaY));
+      double[] tempLightLoc0 = {point_light_source_position[0], 0, point_light_source_position[2]};  
+      thetaX =  Math.toRadians(Math.acos(Vector.dotproduct(tempLightLoc0, zAxis)/Vector.get_norm(tempLightLoc0)));
+      polyhedron.transform( AffineTransform3D.get_rotation_transform_xaxis(thetaX)); 
+      double[] tempLightLoc1 = {0, 0, point_light_source_position[2]};   
+      isTransformed = true; 
+    }
     //step 2: set visiblity flags (should already be set)
 
     Arrays.sort(polyhedron.faces);
+    set_visiblity_flags();
     for ( int i = polyhedron.number_of_faces-1; i > -1; i-- )
       if ( polyhedron.faces[i].is_visible ){
+      //TODO change for loop to ascending
         for( int j = i; j > -1; j-- ){
 
           Point3D Q = polyhedron.faces[j].vertices[0];
+          double[] Q_v = Q.get_vector_form();
           double[] n = polyhedron.faces[j].normal;
           double[] L = point_light_source_position;
           double A = Vector.dotproduct(n, L);
-          double B = Vector.dotproduct(n, Q);
+          double B = Vector.dotproduct(n, Q_v);
           Point3D[] shadows_vertices = new Point3D[ polyhedron.faces[i].number_of_vertices ];
 
           double[][] M = { { L[0]*n[0] - A + B, L[0]*n[1],         L[0]*n[2],         (-1)*L[0]*B },
                            { L[1]*n[0],         L[1]*n[1] - A + B, L[1]*n[2],         (-1)*L[1]*B },
                            { L[2]*n[0],         L[2]*n[1],         L[2]*n[2] - A + B, (-1)*L[2]*B },
-                           { n[0],              n[1],              n[3],               -A         } };
+                           { n[0],              n[1],              n[2],               -A         } };
 
 
           //for( Point3D vertex : polyhedron.faces[i].vertices){
@@ -52,24 +69,29 @@ public class Scene {
 
           }
 
+          int[] shadow_projection_xcoords = new int[ shadows_vertices.length ];
+          int[] shadow_projection_ycoords = new int[ shadows_vertices.length ];
 
 
-          int shadow_projection_xcoords = new int[ shadows_vertices.length ];
-          int shadow_projection_ycoords = new int[ shadows_vertices.length ];
-
-
-          for( int i=0; i<shadows_vertices.length; i++ ){
-            shadow_projection_xcoords[i] = (int)( 100*shadows_vertices[i].x/( 1-(shadows_vertices[i].z/camera_position[2]) ) );
-            shadow_projection_ycoords[i] = (int)( 100*shadows_vertices[i].y/( 1-(shadows_vertices[i].z/camera_position[2]) ) );
+          for( int p=0; p<shadows_vertices.length; p++ ){
+            shadow_projection_xcoords[p] = (int)( 100*shadows_vertices[p].x/( 1-(shadows_vertices[p].z/camera_position[2]) ) );
+            shadow_projection_ycoords[p] = (int)( 100*shadows_vertices[p].y/( 1-(shadows_vertices[p].z/camera_position[2]) ) );
           }
 
           Area shadow_area = new Area( new Polygon( shadow_projection_xcoords, shadow_projection_ycoords, shadows_vertices.length ) );
           Area face_area = new Area( new Polygon( polyhedron.faces[j].x_coords_projected, polyhedron.faces[j].y_coords_projected, polyhedron.faces[j].number_of_vertices ) );
-          polyhedron.faces[j].shadow = shadow_area.intersect(face_area);
+          face_area.intersect(shadow_area);
+          polyhedron.faces[j].shadow = shadow_area; 
 
         }
-      }
-    //step 1: transform space back
+        
+          if(isTransformed){
+          thetaX = Math.toRadians(-1*thetaX);
+          polyhedron.transform( AffineTransform3D.get_rotation_transform_xaxis(thetaX));
+          thetaY = Math.toRadians(-1*thetaY);
+          polyhedron.transform( AffineTransform3D.get_rotation_transform_xaxis(thetaY)); 
+          }
+        }
 
   }
 
@@ -89,7 +111,7 @@ public class Scene {
       double[] w = Vector.scale( Vector.dotproduct(unit_point_to_light_source_vector, unit_normal), unit_normal );
       double[] reflected_vector = Vector.subtract( Vector.scale(2, w), unit_point_to_light_source_vector );
       //
-      double brightness =  ( 20 ) + ( 145 * eliminate_negatives( Vector.dotproduct(unit_point_to_light_source_vector, unit_normal) ) ) + ( Math.pow( Vector.dotproduct( reflected_vector, unit_point_to_camera_vector ), 20 ) );
+      double brightness =  ( 35 ) + ( 145 * eliminate_negatives(Vector.dotproduct(unit_point_to_light_source_vector, unit_normal)) ) + ( Math.pow( Vector.dotproduct( reflected_vector, unit_point_to_camera_vector ), 20 ) );
       return brightness;
     }
 

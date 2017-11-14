@@ -22,11 +22,7 @@ public class Vector{
   }
 
   public static Point3D get_Point3D_from_homogeneous(double[] homogeneous_v){
-    Point3D cartesian_point = new double[3];
-    cartesian_point.x = homogeneous_v[0]/homogeneous_v[3];
-    cartesian_point.y = homogeneous_v[1]/homogeneous_v[3];
-    cartesian_point.z = homogeneous_v[2]/homogeneous_v[3];
-
+    Point3D cartesian_point = new Point3D(homogeneous_v[0]/homogeneous_v[3],homogeneous_v[1]/homogeneous_v[3], homogeneous_v[2]/homogeneous_v[3] );
     return cartesian_point;
   }
   /*
