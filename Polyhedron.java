@@ -7,9 +7,9 @@ public class Polyhedron {
   String name;
   int number_of_vertices;
   int number_of_faces;
+  Vertex[] vertices;
   Face[] faces;
-  int[] shadow_x_points;
-  int[] shadow_y_points;
+
 
 
   //constructor
@@ -19,13 +19,14 @@ public class Polyhedron {
     name = reader.get_polyhedron_name();
     number_of_vertices = reader.get_number_of_vertices();
     number_of_faces = reader.get_number_of_faces();
-    faces = reader.get_faces(number_of_vertices, number_of_faces);
+
+    vertices = reader.get_vertices(number_of_vertices);
+    faces = reader.get_faces(number_of_vertices, number_of_faces, vertices);
   }
 
   public void transform(double[][] M){
-    for(Face face : faces)
-      for(int i=0; i<face.number_of_vertices; i++)
-        face.vertices[i].apply_transform(M);
+    for(Vertex vertex : vertices)
+      vertex.apply_transform(M);
   }
 
 

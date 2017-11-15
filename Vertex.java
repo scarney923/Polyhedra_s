@@ -3,18 +3,20 @@ Stores the coordinates of a 3D point.
 A Face object contains four such objects.
 */
 
-public class Point3D{
+public class Vertex{
   double x;
   double y;
   double z;
+  boolean adjacent_to_hidden_face;
+  boolean hidden;
 
-  public Point3D(double x, double y, double z){
+  public Vertex(double x, double y, double z){
     this.x=x;
     this.y=y;
     this.z=z;
   }
 
-  public Point3D(double[] coords){
+  public Vertex(double[] coords){
     this.x=coords[0];
     this.y=coords[1];
     this.z=coords[2];

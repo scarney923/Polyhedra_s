@@ -21,8 +21,8 @@ public class Vector{
     return cartesian_v;
   }
 
-  public static Point3D get_Point3D(double[] v){
-    Point3D cartesian_point = new Point3D(v[0],v[1],v[2]);
+  public static Vertex get_vertex(double[] v){
+    Vertex cartesian_point = new Vertex(v[0],v[1],v[2]);
     return cartesian_point;
   }
   /*
