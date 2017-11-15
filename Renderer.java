@@ -131,16 +131,23 @@ public class Renderer extends JPanel {
 
   public void show_shadows(Graphics2D g2d){
     System.out.println("entered show_shadows");
-    scene.set_unrestricted_shadows();
-    scene.set_shadows();
-    for( Face face : scene.polyhedron.faces ){
-      Color un_shaded = colors_map[ face.color_number ];
-      Color shaded = new Color (255, 255, 255);
-      g2d.setPaint( shaded );
-      if(face.shadow != null)
-        g2d.fill( face.shadow );
+    setBackground(Color.WHITE);
 
+    scene.set_shadow();
+    int len = scene.fun.size();
+    int[] x_points = new int[len];
+    int[] y_points = new int[len];
+
+    int i =0 ;
+    for(Point3D v : scene.fun){
+      x_points[i] = (int)v.x;
+      y_points[i] = (int)v.y;
+      g2d.drawLine(x_points[i], y_points[i], x_points[i], y_points[i]);
+      i++;
     }
+    g2d.setPaint(Color.DARK_GRAY);
+
+    g2d.fill( new Polygon(x_points, y_points, len) );
 
 
   }

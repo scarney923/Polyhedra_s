@@ -185,7 +185,6 @@ class ControlPanel extends JPanel implements ActionListener {
     for (int i = 0; i < list_of_files.length; i++) {
       if ( list_of_files[i].isFile() ){
         file_name = list_of_files[i].getName();
-        file_name = file_name.replace(".txt", "");
         polyhedra_filenames.add( file_name );
 
       }

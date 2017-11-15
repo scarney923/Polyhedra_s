@@ -14,6 +14,7 @@ public class Scene {
   double[] camera_position;
   double[] point_light_source_position;
   final int INITIAL_SCALE = 150;
+  ArrayList<Point3D> fun;
 
   public Scene(){
     this.polyhedron = new Polyhedron("./polyhedra_data/Cube.txt");;
@@ -102,6 +103,23 @@ public class Scene {
 
     }
 
+    public void set_shadow(){
+      double Vz_new = -10;
+      fun = new ArrayList<Point3D>();
+
+      for( Face face : polyhedron.faces){
+        for( Point3D vertex : face.vertices){
+          double t = ( Vz_new - point_light_source_position[2] ) / ( vertex.z - point_light_source_position[2] );
+          double Vx_new = point_light_source_position[0] + t*(vertex.x - point_light_source_position[0]);
+          double Vy_new = point_light_source_position[1] + t*(vertex.y - point_light_source_position[1]);
+          fun.add( new Point3D(Vx_new, Vy_new, Vz_new) );
+
+
+        }
+      }
+
+    }
+
 
 
     private double eliminate_negatives(double value){
@@ -113,137 +131,5 @@ public class Scene {
 
 
 
-    /*
-
-    */
-    public void set_unrestricted_shadows(){
-      System.out.println("entered show_unrestricted_shadows");
-
-      boolean space_transformed = false;
-
-      double[] L = point_light_source_position;
-      double[] a = Vector.get_normalized(point_light_source_position);
-      double g = Math.sqrt( Math.pow(a[1], 2) + Math.pow(a[2], 2) );
-
-      double[][] Mx =   {   {1,     0,       0},
-                            {0,     a[2]/g, -a[1]/g},
-                            {0,     a[1]/g,  a[2]/g} };
-
-      double[][] Mx_inv = { {1,     0,       0},
-                            {0,     a[2]/g,  a[1]/g},
-                            {0,    -a[1]/g,  a[2]/g} };
-
-      double[][] My = {     {g,     0,      -a[0]},
-                            {0,     1,       0},
-                            {a[0],  0,       g} };
-
-
-      double[][] My_inv = { {g,     0,       a[0]},
-                            {0,     1,       0},
-                            {-a[0], 0,       g} };
-
-      double[][] Mrot = AffineTransform3D.multiply(My, Mx);
-
-      double[][] Mrot_inv = AffineTransform3D.multiply(Mx_inv, My_inv);
-
-
-
-
-
-      if( point_light_source_position[0] != 0 || point_light_source_position[1] != 0 ){
-        L = Vector.apply_transform(point_light_source_position, Mrot);
-        polyhedron.transform( Mrot );
-        Arrays.sort(polyhedron.faces);
-
-        space_transformed = true;
-      }
-
-
-
-
-      for ( int i = polyhedron.number_of_faces-1; i > -1; i-- ){
-        if ( polyhedron.faces[i].is_visible ){
-          for( int j = 0; j < i; j++ ){
-            if ( polyhedron.faces[j].is_visible ){
-
-
-
-              double[] Q = polyhedron.faces[j].vertices[0].get_vector_form();
-
-              double[] v0 = { polyhedron.faces[j].vertices[1].x-polyhedron.faces[j].vertices[0].x, polyhedron.faces[j].vertices[1].y-polyhedron.faces[j].vertices[0].y, polyhedron.faces[j].vertices[1].z-polyhedron.faces[j].vertices[0].z };
-              double[] v1 = { polyhedron.faces[j].vertices[2].x-polyhedron.faces[j].vertices[0].x, polyhedron.faces[j].vertices[2].y-polyhedron.faces[j].vertices[0].y, polyhedron.faces[j].vertices[2].z-polyhedron.faces[j].vertices[0].z };
-              double[] n = Vector.crossproduct(v0,v1);
-
-              double A = Vector.dotproduct(n, L);
-              double B = Vector.dotproduct(n, Q);
-
-              double[][] M = { { L[0]*n[0] - A + B, L[0]*n[1],         L[0]*n[2],         (-1)*L[0]*B },
-                               { L[1]*n[0],         L[1]*n[1] - A + B, L[1]*n[2],         (-1)*L[1]*B },
-                               { L[2]*n[0],         L[2]*n[1],         L[2]*n[2] - A + B, (-1)*L[2]*B },
-                               { n[0],              n[1],              n[2],               -A         } };
-
-              Point3D[] shadows_vertices = new Point3D[ polyhedron.faces[i].number_of_vertices ];
-
-              for(int k = 0; k < shadows_vertices.length; k++){
-                Point3D vertex = polyhedron.faces[i].vertices[k];
-                double[] shadow_vertice_homogeneous = ( Vector.apply_transform(vertex.get_homogeneous_vector_form(), M) );
-
-                shadows_vertices[ k ] = Vector.get_Point3D ( Vector.apply_transform( Vector.get_cartesian_components_of_homogeneous_vector ( shadow_vertice_homogeneous ), Mrot_inv ) );
-
-              }
-              polyhedron.faces[j].shadows_unrestricted.add( shadows_vertices );
-
-
-
-            }
-          }
-        }
-
-
-      }
-      if(space_transformed){
-        polyhedron.transform(Mrot_inv);
-        Arrays.sort(polyhedron.faces);
-
-      }
-
-
-    }
-    /*
-
-    */
-    public void set_shadows(){
-      System.out.println("entered set_shadows");
-
-      for( Face face : polyhedron.faces ){
-        face.shadow = new Area();
-        for( Point3D[] shadow_unrestricted : face.shadows_unrestricted ){
-          int[] shadow_unrestricted_projection_xcoords = new int[ shadow_unrestricted.length ];
-          int[] shadow_unrestricted_projection_ycoords = new int[ shadow_unrestricted.length ];
-
-
-          for( int p=0; p<shadow_unrestricted.length; p++ ){
-            shadow_unrestricted_projection_xcoords[p] = (int)( 100*shadow_unrestricted[p].x/( 1-(shadow_unrestricted[p].z/camera_position[2]) ) );
-            shadow_unrestricted_projection_xcoords[p] = (int)( 100*shadow_unrestricted[p].y/( 1-(shadow_unrestricted[p].z/camera_position[2]) ) );
-          }
-
-          Area shadow_area = new Area( new Polygon( shadow_unrestricted_projection_xcoords, shadow_unrestricted_projection_xcoords, shadow_unrestricted.length ) );
-          Area face_area = new Area( new Polygon( face.x_coords_projected, face.y_coords_projected, face.number_of_vertices ) );
-          shadow_area.intersect(face_area);
-          face.shadow.add(shadow_area);
-        }
-
-      }
-
-
-
-    }
-
-
-    public void clean_shadows(){
-      for( Face face : polyhedron.faces ){
-        face.shadows_unrestricted = new ArrayList<Point3D[]>();
-      }
-    }
 
 }
