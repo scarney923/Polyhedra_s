@@ -1,16 +1,17 @@
 
 /*
-Utility class that offers methods pertaining to 3D transformation matrices. Since we want
-to be able to translate the cube at some point, we use homogeneous coordinates.
+Utility class that offers methods pertaining to 3D transformation matrices.
 */
 public class AffineTransform3D {
 
+
+  /*
+  Multiply two matrices a and b together, in given order. */
   public static double[][] multiply(double[][] a, double[][] b){
    int m1 = a.length;
    int n1 = a[0].length;
    int m2 = b.length;
    int n2 = b[0].length;
-   if (n1 != m2) throw new RuntimeException("Illegal matrix dimensions.");
    double[][] c = new double[m1][n2];
    for (int i = 0; i < m1; i++)
        for (int j = 0; j < n2; j++)

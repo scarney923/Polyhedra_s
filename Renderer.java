@@ -15,11 +15,13 @@ public class Renderer extends JPanel {
   boolean shades = false;
   boolean shadows = false;
   Color[] colors_map;
+  int scale;
 
 
 
   public Renderer(Scene scene){
     this.scene = scene;
+    this.scale = 150;
 
 
     setPreferredSize(new Dimension(600,450));
@@ -59,7 +61,9 @@ public class Renderer extends JPanel {
 
 
   }
-
+  /*
+  Explain range 0-length-2
+  */
   public void show_wireframe(Graphics2D g2d){
     g2d.setPaint( Color.white );
 
@@ -84,7 +88,17 @@ public class Renderer extends JPanel {
 
     }
   }
+  /*
+  Note that:
 
+  (i) Shades can be shown either in grayscale or in colors, depending on the 'color' flag's
+  value. Colored shading is determined by taking a fraction of the color mapped to the face. In other words,
+  without shading, all faces have maximum brightness. The fraction is the calculated brightness
+  divided by 255 (max value of RGB component).
+
+  (ii) Flat shading is used. Therefore, all points on a given face have the same color.
+
+  */
   public void show_shades(Graphics2D g2d, Boolean colors){
     scene.set_visiblity_flags();
 
@@ -92,7 +106,6 @@ public class Renderer extends JPanel {
       if(face.is_visible){
 
         double brightness = scene.get_point_brightness( face.vertices[0].get_vector_form(), face.normal );
-        //Color shaded_face_color = new Color(brightness,brightness,brightness);
 
         int red, green, blue;
 

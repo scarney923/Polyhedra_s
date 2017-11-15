@@ -21,7 +21,6 @@ class ControlPanel extends JPanel implements ActionListener {
   ArrayList<String> polyhedra_filenames;
   JComboBox polyhedra_choices;
 
-  JTextField[] camera_coordinates;
   JTextField[] light_source_coordinates;
 
   JButton render;
@@ -33,7 +32,6 @@ class ControlPanel extends JPanel implements ActionListener {
   JTextField[] rotation_axis_cooardines;
   JButton rotate;
 
-  //the increment with which we rotate the dodecahedron
   final double rotate_increment = Math.toRadians(10);
 
   JButton bigger;
@@ -64,20 +62,11 @@ class ControlPanel extends JPanel implements ActionListener {
     }
     rendering_options_buttons[0].setSelected(true);
 
-    add(new JLabel("Set Camera Position"));
-    JPanel camera_coords_panel = new JPanel();
-    camera_coords_panel.setLayout(new BoxLayout(camera_coords_panel, BoxLayout.X_AXIS));
-    camera_coordinates = new JTextField[3];
-    camera_coordinates[0] = new JTextField("0.0");
-    camera_coordinates[1] = new JTextField("0.0");
-    camera_coordinates[2] = new JTextField("10.0");
-    for(int i =0; i<3; i++)
-      camera_coords_panel.add(camera_coordinates[i]);
-    add(camera_coords_panel);
+
 
     add(new JLabel("Set Light Source Position"));
     JPanel light_coords_panel = new JPanel();
-    light_coords_panel.setLayout(new BoxLayout(light_coords_panel, BoxLayout.X_AXIS));
+    light_coords_panel.setLayout(new GridLayout(1,3,30,10));
     light_source_coordinates = new JTextField[3];
     light_source_coordinates[0] = new JTextField("0.0");
     light_source_coordinates[1] = new JTextField("500.0");
@@ -89,8 +78,6 @@ class ControlPanel extends JPanel implements ActionListener {
     render = new JButton("Render Polyhedron");
     render.addActionListener(this);
     add(render);
-
-    add(new JLabel("Operations"));
 
     add(new JLabel("Rotate Polyhedron"));
     btnGroup = new ButtonGroup();
@@ -109,7 +96,7 @@ class ControlPanel extends JPanel implements ActionListener {
       coords.add(rotation_axis_cooardines[i]);
     }
     add(coords);
-    rotate = new JButton("rotate");
+    rotate = new JButton("Rotate");
     rotate.addActionListener(this);
     add(rotate);
 
@@ -142,18 +129,20 @@ class ControlPanel extends JPanel implements ActionListener {
       canvas.shadows = rendering_options_buttons[3].isSelected();
 
       for(int i=0; i<3; i++)
-        scene.camera_position[i] = Double.parseDouble( camera_coordinates[i].getText() );
-
-
-      for(int i=0; i<3; i++)
         scene.point_light_source_position[i] = Double.parseDouble( light_source_coordinates[i].getText() );
 
 
-      scene.set_visiblity_flags();
-      scene.set_projection();
+
 
 
     }
+
+    if( evt.getSource() == bigger )
+      canvas.scale+=10;
+
+    if( evt.getSource() == smaller )
+      canvas.scale-=10;
+
 
 
     if( evt.getSource() == rotate ){
@@ -175,16 +164,15 @@ class ControlPanel extends JPanel implements ActionListener {
         v[i] = input;
       }
 
-      if(valid_input_coordinates){
+      if(valid_input_coordinates)
         scene.polyhedron.transform( AffineTransform3D.get_rotation_transform_arb(v, rotate_increment_temp ) );
-        scene.set_visiblity_flags();
-        scene.set_projection();
-        //scene.clean_shadows();
-      }
+
     }
 
 
-
+    scene.set_visiblity_flags();
+    Arrays.sort(scene.polyhedron.faces);
+    scene.set_projection(canvas.scale);
     canvas.repaint();
 
 

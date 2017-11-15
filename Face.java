@@ -7,9 +7,6 @@ Responsible for storing the necessary data of a face, i.e. its vertices and colo
 public class Face implements Comparable {
   int color_number;
   Point3D[] vertices;
-
-
-
   int number_of_vertices;
   double[] normal;
   boolean is_visible;
@@ -42,7 +39,9 @@ public class Face implements Comparable {
   }
 
 
-
+  /*
+  
+  */
   @Override
   public int compareTo(Object other_face) {
       double z_cummulative = 0;
@@ -55,7 +54,7 @@ public class Face implements Comparable {
         other_z_cummulative += vertice.z;
       }
 
-      /* For Ascending order*/
+      /* Ascending order*/
       double result = z_cummulative/vertices.length - other_z_cummulative/vertices.length ;
       if( result > 0 )
         return 1;

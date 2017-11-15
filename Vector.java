@@ -13,7 +13,7 @@ public class Vector{
       return dot;
   }
 
-  public static double[] get_cartesian_from_homogeneous(double[] homogeneous_v){
+  public static double[] get_cartesian_components_of_homogeneous_vector(double[] homogeneous_v){
     double[] cartesian_v = new double[homogeneous_v.length-1];
     for(int i=0; i<cartesian_v.length; i++)
       cartesian_v[i] = homogeneous_v[i]/homogeneous_v[homogeneous_v.length-1];
