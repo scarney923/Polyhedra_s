@@ -19,8 +19,6 @@ class ControlPanel extends JPanel implements ActionListener {
 
   //scene modifications
   ArrayList<String> polyhedra_filenames;
-  ArrayList<String> truncated_names;
-
   JComboBox polyhedra_choices;
 
   JTextField[] light_source_coordinates;
@@ -34,13 +32,13 @@ class ControlPanel extends JPanel implements ActionListener {
   JTextField[] rotation_axis_cooardines;
   JButton rotate;
 
+  //rotation matricies will always use this value as theta
   final double rotate_increment = Math.toRadians(10);
 
   JButton bigger;
   JButton smaller;
 
-
-
+//constructor initializes all JComponents 
   public ControlPanel(Renderer canvas, Scene scene){
     this.canvas = canvas;
     this.scene = scene;
@@ -48,16 +46,20 @@ class ControlPanel extends JPanel implements ActionListener {
     setPreferredSize(new Dimension(400,500));
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-
+    //reads filenames from polyhedra_data folder
     polyhedra_filenames = new ArrayList<String>();
-    truncated_names = new ArrayList<String>();
     read_in_filenames();
-
+    //adds these filenames to a JComboBox
     polyhedra_choices = new JComboBox(polyhedra_filenames.toArray());
     polyhedra_choices.setSelectedIndex(0);
     add(polyhedra_choices);
-
-    add(new JLabel("Show..."));
+    
+    JPanel choices = new JPanel(); 
+    choices.setLayout(new GridLayout(4, 4)); 
+    JLabel show = new JLabel("Show...");
+    show.setAlignmentX(Component.RIGHT_ALIGNMENT);
+    add(show);
+    
     rendering_options_buttons = new JRadioButton[4];
     for(int i =0; i<4; i++){
       rendering_options_buttons[i] = new JRadioButton(rendering_options[i], false);
@@ -65,17 +67,21 @@ class ControlPanel extends JPanel implements ActionListener {
     }
     rendering_options_buttons[0].setSelected(true);
 
-
-
-    add(new JLabel("Set Light Source Position"));
+    JLabel l_source = new JLabel("Set Light Source Position");
+    l_source.setAlignmentX(Component.CENTER_ALIGNMENT); 
+    add(l_source); 
+    
     JPanel light_coords_panel = new JPanel();
-    light_coords_panel.setLayout(new GridLayout(1,3,30,10));
+    light_coords_panel.setLayout(new BoxLayout(light_coords_panel, BoxLayout.X_AXIS));
     light_source_coordinates = new JTextField[3];
     light_source_coordinates[0] = new JTextField("0.0");
     light_source_coordinates[1] = new JTextField("500.0");
     light_source_coordinates[2] = new JTextField("1000.0");
-    for(int i =0; i<3; i++)
+    for(int i =0; i<3; i++){
+      light_source_coordinates[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+      light_source_coordinates[i].setMaximumSize(new Dimension(140,200));
       light_coords_panel.add(light_source_coordinates[i]);
+      }
     add(light_coords_panel);
 
     render = new JButton("Render Polyhedron");
@@ -188,7 +194,6 @@ class ControlPanel extends JPanel implements ActionListener {
     for (int i = 0; i < list_of_files.length; i++) {
       if ( list_of_files[i].isFile() ){
         file_name = list_of_files[i].getName();
-        //file_name = file_name.replace(".txt", "");
         polyhedra_filenames.add( file_name );
       }
     }
