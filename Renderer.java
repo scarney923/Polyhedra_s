@@ -15,6 +15,7 @@ public class Renderer extends JPanel {
   boolean shades = false;
   boolean shadows = false;
   Color[] colors_map;
+  double[] point_light_source_position;
   int scale;
 
 
@@ -49,16 +50,15 @@ public class Renderer extends JPanel {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.translate(getWidth()/2,getHeight()/2);
     g2d.scale(1,-1);
-
+    if(shadows)
+      show_shadows(g2d);
     if(colors)
       show_colors(g2d);
     if(shades)
       show_shades(g2d, colors);
-    if(shadows)
-      show_shadows(g2d);
     if(wireframe)
       show_wireframe(g2d);
-
+    
 
   }
   /*
@@ -127,30 +127,68 @@ public class Renderer extends JPanel {
 
 
     }
+
+      
   }
 
   public void show_shadows(Graphics2D g2d){
-    System.out.println("entered show_shadows");
     setBackground(Color.WHITE);
 
-    /*scene.set_shadow();
+    //scene.set_shadow();
+    
     int len = scene.fun.size();
-    int[] x_points = new int[len];
-    int[] y_points = new int[len];
+    int[] x_points = new int[scene.polyhedron.number_of_vertices];
+    int[] y_points = new int[scene.polyhedron.number_of_vertices];
+    Area initial_area = new Area();
 
+    for(Face face : scene.polyhedron.faces){ 
     int i =0 ;
-    for(Vertex v : scene.fun){
-      x_points[i] = (int)( scale*v.x/( 1-(v.z/scene.camera_position[2]) ) );
-      y_points[i] = (int)( scale*v.y/( 1-(v.z/scene.camera_position[2]) ) );
-      g2d.drawLine(x_points[i], y_points[i], x_points[i], y_points[i]);
-      i++;
+
+    double[] normal = face.normal; 
+       for(Vertex v : face.vertices){
+         System.out.printf("%f     %f", v.x, v.y); 
+         x_points[i] = (int)( 150*v.x/( 1-(v.z/scene.point_light_source_position[2]) ) );
+         y_points[i] = (int)( 150*v.y/( 1-(v.z/scene.point_light_source_position[2]) ) );
+         int[] transformed = shadow_transform(x_points[i], y_points[i], normal); 
+         x_points[i] = transformed[0]; 
+         y_points[i] = transformed[1]; 
+         Area blah = new Area(new Polygon(x_points, y_points, x_points.length)); 
+         initial_area.add(blah); 
+         i++;
+       }
+        g2d.setPaint(Color.DARK_GRAY);
+
+    g2d.fill(initial_area);
+
     }
-    g2d.setPaint(Color.DARK_GRAY);
-
-    g2d.fill( new Polygon(x_points, y_points, len) );*/
-
-
   }
+
+   public int[]shadow_transform(int xcoord, int ycoord, double[] normal){
+       //double[] points = int_to_double(points_to_transform);
+       double[] points = {xcoord, ycoord, 0};  
+       double[] vect_to_light_source = Vector.subtract(points, scene.point_light_source_position); 
+       double theta = Math.acos(Vector.dotproduct(Vector.get_normalized(vect_to_light_source), Vector.get_normalized(normal))); 
+       //double[][] M = AffineTransform3D.get_rotation_transform_arb(points, theta);
+       double[][] M = AffineTransform3D.get_shear_transform(vect_to_light_source[0]/800,vect_to_light_source[1]/800 );
+       double[] result = Vector.apply_transform(points, M); 
+       return double_to_int(result);
+  }
+          
+   public double[] int_to_double(int[] int_array){
+      double[] result = new double[int_array.length]; 
+      for(int i = 0; i<int_array.length; i++){
+         result[i] = (int)int_array[i]; 
+      }
+      return result; 
+   }
+   
+   public int[] double_to_int(double[] double_array){
+      int[] result = new int[double_array.length]; 
+      for(int i = 0; i<double_array.length; i++){
+         result[i] = (int)double_array[i]; 
+      }
+      return result; 
+   }
 
 
 

@@ -5,6 +5,7 @@ Utility class responsible for offering methods pertaining to vectors.
 public class Vector{
 
 
+  /*returns the dot product of two vectors given in the form of double arrays*/
   public static double dotproduct(double[] v1, double[] v2) {
       double dot = 0;
       for(int i=0; i<v1.length; i++){
@@ -13,6 +14,7 @@ public class Vector{
       return dot;
   }
 
+  /*converts from a homogeneous vector to a cartesian vector by dividing by the w component of the homogeneous vector*/
   public static double[] get_cartesian_components_of_homogeneous_vector(double[] homogeneous_v){
     double[] cartesian_v = new double[homogeneous_v.length-1];
     for(int i=0; i<cartesian_v.length; i++)
@@ -21,6 +23,7 @@ public class Vector{
     return cartesian_v;
   }
 
+  /*converts a vector in the form of a double array to a Vertex object*/
   public static Vertex get_vertex(double[] v){
     Vertex cartesian_point = new Vertex(v[0],v[1],v[2]);
     return cartesian_point;
@@ -35,6 +38,8 @@ public class Vector{
       return cross;
   }
 
+  /* subtracts one vector from the other and returns the resulting vector. Used in many of our calculations for shading and shadows
+  to find the vector from a given point to a lightsource*/
   public static double[] subtract(double[] v1, double[] v2){
     double[] v = new double[v1.length];
     for(int i=0; i<v1.length; i++)
@@ -43,6 +48,7 @@ public class Vector{
     return v;
   }
 
+  /*scales each vertex by the given scalar multiple.*/
   public static double[] scale(double scalar, double[] v){
     double[] v_scaled = new double[v.length];
     for(int i=0; i<v.length; i++)
@@ -51,6 +57,7 @@ public class Vector{
     return v_scaled;
   }
 
+  /*turns the given vector into a unit vector by dividing by the length returned by get_norm*/
   public static double[] get_normalized(double[] v) {
       double[] normalized = new double[v.length];
       double vector_length = get_norm(v);
@@ -60,7 +67,7 @@ public class Vector{
       return normalized;
   }
 
-
+  /*finds the magnitude of the given vector*/
   public static double get_norm(double ... a){
     double norm_squared = 0;
     for(double e : a){

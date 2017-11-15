@@ -25,7 +25,6 @@ class ControlPanel extends JPanel implements ActionListener {
 
   JButton render;
 
-
   ButtonGroup btnGroup;
   JRadioButton ccw;
   JRadioButton cw;
@@ -38,7 +37,7 @@ class ControlPanel extends JPanel implements ActionListener {
   JButton bigger;
   JButton smaller;
 
-//constructor initializes all JComponents 
+  //constructor initializes all JComponents 
   public ControlPanel(Renderer canvas, Scene scene){
     this.canvas = canvas;
     this.scene = scene;
@@ -49,6 +48,7 @@ class ControlPanel extends JPanel implements ActionListener {
     //reads filenames from polyhedra_data folder
     polyhedra_filenames = new ArrayList<String>();
     read_in_filenames();
+    
     //adds these filenames to a JComboBox
     polyhedra_choices = new JComboBox(polyhedra_filenames.toArray());
     polyhedra_choices.setSelectedIndex(0);
@@ -57,18 +57,20 @@ class ControlPanel extends JPanel implements ActionListener {
     JPanel choices = new JPanel(); 
     choices.setLayout(new GridLayout(4, 4)); 
     JLabel show = new JLabel("Show...");
-    show.setAlignmentX(Component.RIGHT_ALIGNMENT);
-    add(show);
+    choices.add(show);
+    choices.add(new JLabel(""));
     
     rendering_options_buttons = new JRadioButton[4];
     for(int i =0; i<4; i++){
       rendering_options_buttons[i] = new JRadioButton(rendering_options[i], false);
-      add(rendering_options_buttons[i]);
+      choices.add(rendering_options_buttons[i]);
     }
     rendering_options_buttons[0].setSelected(true);
+        add(choices);
+
 
     JLabel l_source = new JLabel("Set Light Source Position");
-    l_source.setAlignmentX(Component.CENTER_ALIGNMENT); 
+    l_source.setAlignmentX(Component.RIGHT_ALIGNMENT); 
     add(l_source); 
     
     JPanel light_coords_panel = new JPanel();
@@ -86,45 +88,53 @@ class ControlPanel extends JPanel implements ActionListener {
 
     render = new JButton("Render Polyhedron");
     render.addActionListener(this);
+    render.setAlignmentX(Component.CENTER_ALIGNMENT);
     add(render);
 
-    add(new JLabel("Rotate Polyhedron"));
+    JPanel rotatePanel = new JPanel();
+    rotatePanel.setLayout(new BoxLayout(rotatePanel, BoxLayout.X_AXIS)); 
+    JPanel buttonPanel = new JPanel(); 
+    buttonPanel.setLayout(new GridLayout(1, 3)); 
+    buttonPanel.add(new JLabel("Rotate Polyhedron"));
     btnGroup = new ButtonGroup();
     ccw = new JRadioButton("Counter Clockwise", true);
     btnGroup.add(ccw);
-    add(ccw);
+    buttonPanel.add(ccw);
     cw = new JRadioButton("Clockwise");
     btnGroup.add(cw);
-    add(cw);
+    buttonPanel.add(cw);
+    add(buttonPanel); 
 
-    JPanel coords = new JPanel();
-    coords.setLayout(new GridLayout(1,3,30,10));
     rotation_axis_cooardines = new JTextField[3];
     for(int i =0; i<3; i++){
       rotation_axis_cooardines[i] = new JTextField("0");
-      coords.add(rotation_axis_cooardines[i]);
+      rotation_axis_cooardines[i].setAlignmentX(Component.LEFT_ALIGNMENT); 
+      rotation_axis_cooardines[i].setMaximumSize(new Dimension(140,200));
+      rotatePanel.add(rotation_axis_cooardines[i]);
     }
-    add(coords);
+    add(rotatePanel);
     rotate = new JButton("Rotate");
     rotate.addActionListener(this);
     add(rotate);
 
-    add(new JLabel("Scale Polyhedron"));
+    JPanel scalePanel = new JPanel();
+    scalePanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
+    scalePanel.add(new JLabel("Scale Polyhedron"));
     bigger = new JButton("Bigger");
     bigger.addActionListener(this);
-    add(bigger);
+    scalePanel.add(bigger);
     smaller = new JButton("Smaller");
     smaller.addActionListener(this);
-    add(smaller);
-
-
-
-
+    scalePanel.add(smaller);
+    add(scalePanel);
 
   }
 
 
 
+  /*
+     this method handles any GUI action using the actionListener in each component. Specifically it tells scene
+     which type of shape to build, scales the object, and calls transform on the polyhedron for roation. */
   public void actionPerformed(ActionEvent evt){
 
 
@@ -137,13 +147,9 @@ class ControlPanel extends JPanel implements ActionListener {
       canvas.shades = rendering_options_buttons[2].isSelected();
       canvas.shadows = rendering_options_buttons[3].isSelected();
 
-      for(int i=0; i<3; i++)
+      for(int i=0; i<3; i++){
         scene.point_light_source_position[i] = Double.parseDouble( light_source_coordinates[i].getText() );
-
-
-
-
-
+      }
     }
 
     if( evt.getSource() == bigger )
@@ -155,7 +161,7 @@ class ControlPanel extends JPanel implements ActionListener {
 
 
     if( evt.getSource() == rotate ){
-      //the increment with which we rotate the dodecahedron
+      //the increment with which we rotate the polygon
       double rotate_increment_temp = ccw.isSelected() ? rotate_increment : -rotate_increment;
 
       double[] v = new double[3]; //stores the rotation axis
@@ -173,12 +179,13 @@ class ControlPanel extends JPanel implements ActionListener {
         v[i] = input;
       }
 
+     //gets the rotation matrix from AffineTransform3D and passes it into the transform method in polyhedron 
       if(valid_input_coordinates)
         scene.polyhedron.transform( AffineTransform3D.get_rotation_transform_arb(v, rotate_increment_temp ) );
 
     }
 
-
+    //decides which faces are visible, sorts them by z coordinate value, and projects them onto the screen
     scene.set_visiblity_flags();
     Arrays.sort(scene.polyhedron.faces);
     scene.set_projection(canvas.scale);
@@ -187,6 +194,9 @@ class ControlPanel extends JPanel implements ActionListener {
 
   }
 
+  /*
+   method that reads in each file name from the folder of polyhedra files so they can be added to the JComboBox
+  */
   private void read_in_filenames(){
     File folder = new File("./polyhedra_data");
     File[] list_of_files = folder.listFiles();

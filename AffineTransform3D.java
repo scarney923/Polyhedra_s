@@ -122,5 +122,13 @@ public class AffineTransform3D {
 
       return M;
     }
+    
+    public static double[][] get_shear_transform(double sx, double sy){
+      double[][] M = {{1, sx, 0},
+                      { sy , 1, 0 },
+                      {0, 0, 1}};
+                      
+      return M; 
+    }
 
 }

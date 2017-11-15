@@ -14,6 +14,7 @@ public class Scene {
   double[] camera_position;
   double[] point_light_source_position;
   final int INITIAL_SCALE = 150;
+  ArrayList<Point3D> fun; 
 
   public Scene(){
     this.polyhedron = new Polyhedron("./polyhedra_data/Cube.txt");;
@@ -21,6 +22,7 @@ public class Scene {
     this.point_light_source_position = new double[] {0.0,500.0,1000.0};
     set_visiblity_flags();
     set_projection(INITIAL_SCALE);
+    fun = new ArrayList<Point3D>();
 
 
   }
@@ -117,7 +119,7 @@ public class Scene {
         }
       }
 
-      //fun = QuickHull.quickHull(fun1);
+      //fun = ConvexHull.convexHull(fun1, );
 
     }
 
