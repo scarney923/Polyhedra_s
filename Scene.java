@@ -123,6 +123,8 @@ public class Scene {
 
 
 
+
+
     private double eliminate_negatives(double value){
       if(value > 0)
         return value;

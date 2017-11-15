@@ -18,10 +18,13 @@ public class Face implements Comparable {
 
   public Face(int number_of_vertices, int color_number, Vertex ... vertices ){
     this.number_of_vertices = number_of_vertices;
-    vertices = new Vertex[number_of_vertices+1];
+    this.vertices = new Vertex[number_of_vertices+1];
 
-    for(int i = 0; i < number_of_vertices; i++)
+    for(int i = 0; i < number_of_vertices; i++){
+      System.out.println(vertices[i]);
       this.vertices[i] = vertices[i];
+
+    }
 
     this.vertices[number_of_vertices] = this.vertices[0];
     this.color_number = color_number;

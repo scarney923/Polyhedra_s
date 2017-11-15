@@ -69,7 +69,9 @@ public class PolyDataFileParser {
 
   public Face[] get_faces(int number_of_vertices, int number_of_faces, Vertex[] vertices){
     scanner.nextLine();
-
+    for(int i =0;i < number_of_vertices; i++){
+      System.out.println(vertices[i]);
+    }
     Face[] faces = new Face[ number_of_faces ];
 
     int which_vertice;
