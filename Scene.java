@@ -22,6 +22,8 @@ public class Scene {
   TODO: do we need to make light source in the exact same position as camera?
   */
   public void set_unrestricted_shadows(){
+    System.out.println("entered show_unrestricted_shadows");
+
     boolean space_transformed = false;
 
     double[] L = point_light_source_position;
@@ -108,10 +110,12 @@ public class Scene {
 
   }
 
-  public set_shadows(){
+  public void set_shadows(){
+    System.out.println("entered set_shadows");
+
     for( Face face : polyhedron.faces ){
       face.shadow = new Area();
-      for( Point3D shadow_unrestricted : face.shadows_unrestricted ){
+      for( Point3D[] shadow_unrestricted : face.shadows_unrestricted ){
         int[] shadow_unrestricted_projection_xcoords = new int[ shadow_unrestricted.length ];
         int[] shadow_unrestricted_projection_ycoords = new int[ shadow_unrestricted.length ];
 
@@ -121,7 +125,7 @@ public class Scene {
           shadow_unrestricted_projection_xcoords[p] = (int)( 100*shadow_unrestricted[p].y/( 1-(shadow_unrestricted[p].z/camera_position[2]) ) );
         }
 
-        Area shadow_area = new Area( new Polygon( shadow_projection_xcoords, shadow_projection_ycoords, shadows_vertices.length ) );
+        Area shadow_area = new Area( new Polygon( shadow_unrestricted_projection_xcoords, shadow_unrestricted_projection_xcoords, shadow_unrestricted.length ) );
         Area face_area = new Area( new Polygon( face.x_coords_projected, face.y_coords_projected, face.number_of_vertices ) );
         shadow_area.intersect(face_area);
         face.shadow.add(shadow_area);
@@ -185,7 +189,7 @@ public class Scene {
 
     public void clean_shadows(){
       for( Face face : polyhedron.faces ){
-        face.shadow_unrestricted = new ArrayList<Point3D[]>;
+        face.shadows_unrestricted = new ArrayList<Point3D[]>();
       }
     }
 

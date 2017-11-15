@@ -93,7 +93,7 @@ public class AffineTransform3D {
 
     */
     public static double[][] get_rotation_transform_arb(double[] axis, double theta) {
-      double[] v = Vector.normalize(axis);
+      double[] v = Vector.get_normalized(axis);
       double c = Math.cos(theta);
       double s = Math.sin(theta);
       double ax = v[0]; double ay = v[1]; double az = v[2];
