@@ -8,6 +8,9 @@ public class Polyhedron {
   int number_of_vertices;
   int number_of_faces;
   Face[] faces;
+  int[] shadow_x_points;
+  int[] shadow_y_points;
+
 
   //constructor
   public Polyhedron(String filepath){

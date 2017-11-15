@@ -104,19 +104,21 @@ public class Scene {
     }
 
     public void set_shadow(){
-      double Vz_new = -10;
-      fun = new ArrayList<Point3D>();
+      double Vz_new = -4;
+      ArrayList<Point3D> fun1 = new ArrayList<Point3D>();
 
       for( Face face : polyhedron.faces){
         for( Point3D vertex : face.vertices){
           double t = ( Vz_new - point_light_source_position[2] ) / ( vertex.z - point_light_source_position[2] );
           double Vx_new = point_light_source_position[0] + t*(vertex.x - point_light_source_position[0]);
           double Vy_new = point_light_source_position[1] + t*(vertex.y - point_light_source_position[1]);
-          fun.add( new Point3D(Vx_new, Vy_new, Vz_new) );
+          fun1.add( new Point3D(Vx_new, Vy_new, Vz_new) );
 
 
         }
       }
+
+      fun = QuickHull.quickHull(fun1);
 
     }
 
