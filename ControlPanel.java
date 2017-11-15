@@ -19,6 +19,8 @@ class ControlPanel extends JPanel implements ActionListener {
 
   //scene modifications
   ArrayList<String> polyhedra_filenames;
+  ArrayList<String> truncated_names;
+
   JComboBox polyhedra_choices;
 
   JTextField[] light_source_coordinates;
@@ -48,6 +50,7 @@ class ControlPanel extends JPanel implements ActionListener {
 
 
     polyhedra_filenames = new ArrayList<String>();
+    truncated_names = new ArrayList<String>();
     read_in_filenames();
 
     polyhedra_choices = new JComboBox(polyhedra_filenames.toArray());
@@ -185,8 +188,8 @@ class ControlPanel extends JPanel implements ActionListener {
     for (int i = 0; i < list_of_files.length; i++) {
       if ( list_of_files[i].isFile() ){
         file_name = list_of_files[i].getName();
+        //file_name = file_name.replace(".txt", "");
         polyhedra_filenames.add( file_name );
-
       }
     }
   }

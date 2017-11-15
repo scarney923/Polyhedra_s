@@ -140,8 +140,8 @@ public class Renderer extends JPanel {
 
     int i =0 ;
     for(Point3D v : scene.fun){
-      x_points[i] = (int)v.x;
-      y_points[i] = (int)v.y;
+      x_points[i] = (int)( scale*v.x/( 1-(v.z/scene.camera_position[2]) ) );
+      y_points[i] = (int)( scale*v.y/( 1-(v.z/scene.camera_position[2]) ) );
       g2d.drawLine(x_points[i], y_points[i], x_points[i], y_points[i]);
       i++;
     }
@@ -151,7 +151,6 @@ public class Renderer extends JPanel {
 
 
   }
-
 
 
 
