@@ -178,16 +178,21 @@ class ControlPanel extends JPanel implements ActionListener {
 
   }
 
-  //MAKE STATIC?
   private void read_in_filenames(){
     File folder = new File("./polyhedra_data");
     File[] list_of_files = folder.listFiles();
-
+    String file_name;
     for (int i = 0; i < list_of_files.length; i++) {
-      if ( list_of_files[i].isFile() )
-        polyhedra_filenames.add( list_of_files[i].getName() );
+      if ( list_of_files[i].isFile() ){
+        file_name = list_of_files[i].getName();
+        file_name = file_name.replace(".txt", "");
+        polyhedra_filenames.add( file_name );
+
+      }
     }
   }
+
+
 
 
 }
