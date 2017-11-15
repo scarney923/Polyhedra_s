@@ -1,18 +1,23 @@
 import java.awt.Color;
 import java.awt.geom.*;
+import java.util.*;
 /*
 Responsible for storing the necessary data of a face, i.e. its vertices and color.
 */
 public class Face implements Comparable {
   int color_number;
   Point3D[] vertices;
+
+
+
   int number_of_vertices;
   double[] normal;
   boolean is_visible;
   int[] x_coords_projected;
   int[] y_coords_projected;
-  Area shadow;
 
+  ArrayList<Point3D[]> shadows_unrestricted;
+  Area shadow;
 
   public Face(int number_of_vertices, int color_number, Point3D ... points ){
     this.number_of_vertices = number_of_vertices;
@@ -24,6 +29,13 @@ public class Face implements Comparable {
     vertices[number_of_vertices] = vertices[0];
     this.color_number = color_number;
 
+
+  }
+
+  public set_normal(){
+    double[] v0 = { vertices[1].x-vertices[0].x, vertices[1].y-vertices[0].y, vertices[1].z-vertices[0].z };
+    double[] v1 = { vertices[2].x-vertices[0].x, vertices[2].y-vertices[0].y, vertices[2].z-vertices[0].z };
+    this.normal = Vector.crossproduct(v0,v1);
 
   }
 

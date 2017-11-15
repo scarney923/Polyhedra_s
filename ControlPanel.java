@@ -152,6 +152,7 @@ class ControlPanel extends JPanel implements ActionListener {
       scene.set_visiblity_flags();
       scene.set_projection();
 
+
     }
 
 
@@ -178,6 +179,7 @@ class ControlPanel extends JPanel implements ActionListener {
         scene.polyhedron.transform( AffineTransform3D.get_rotation_transform_arb(v, rotate_increment_temp ) );
         scene.set_visiblity_flags();
         scene.set_projection();
+        scene.clean_shadows();
       }
     }
 

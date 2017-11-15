@@ -5,10 +5,8 @@ public class Main
 {
 
     public static void main(String[] args){
-    double[] v = {1,1,0};
-    double[] v_n = Vector.normalize(v);
-    for(int i=0; i<3; i++)
-      System.out.println("NORM" + v_n[i]);
+    
+
     JFrame frame = new JFrame();
     JFrame cp_frame = new JFrame();
 

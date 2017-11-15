@@ -21,8 +21,8 @@ public class Vector{
     return cartesian_v;
   }
 
-  public static Point3D get_Point3D_from_homogeneous(double[] homogeneous_v){
-    Point3D cartesian_point = new Point3D(homogeneous_v[0]/homogeneous_v[3],homogeneous_v[1]/homogeneous_v[3], homogeneous_v[2]/homogeneous_v[3] );
+  public static Point3D get_Point3D(double[] v){
+    Point3D cartesian_point = new Point3D(v[0],v[1],v[2]);
     return cartesian_point;
   }
   /*
@@ -51,7 +51,7 @@ public class Vector{
     return v_scaled;
   }
 
-  public static double[] normalize(double[] v) {
+  public static double[] get_normalized(double[] v) {
       double[] normalized = new double[v.length];
       double vector_length = get_norm(v);
       for(int i=0; i<v.length; i++)
