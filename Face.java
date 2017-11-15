@@ -6,7 +6,7 @@ Responsible for storing the necessary data of a face, i.e. its vertices and colo
 */
 public class Face implements Comparable {
   int color_number;
-  Point3D[] vertices;
+  Vertex[] vertices;
   int number_of_vertices;
   double[] normal;
   boolean is_visible;
@@ -16,14 +16,14 @@ public class Face implements Comparable {
   ArrayList<Point3D[]> shadows_unrestricted;
   Area shadow;
 
-  public Face(int number_of_vertices, int color_number, Point3D ... points ){
+  public Face(int number_of_vertices, int color_number, Vertex ... vertices ){
     this.number_of_vertices = number_of_vertices;
-    vertices = new Point3D[number_of_vertices+1];
+    vertices = new Vertex[number_of_vertices+1];
 
     for(int i = 0; i < number_of_vertices; i++)
-      vertices[i] = points[i];
+      this.vertices[i] = vertices[i];
 
-    vertices[number_of_vertices] = vertices[0];
+    this.vertices[number_of_vertices] = this.vertices[0];
     this.color_number = color_number;
 
     shadows_unrestricted = new ArrayList<Point3D[]>();
@@ -40,17 +40,17 @@ public class Face implements Comparable {
 
 
   /*
-  
+
   */
   @Override
   public int compareTo(Object other_face) {
       double z_cummulative = 0;
-      for(Point3D vertice : vertices ){
+      for(Vertex vertice : vertices ){
         z_cummulative += vertice.z;
       }
 
       double other_z_cummulative = 0;
-      for(Point3D vertice : ( (Face)other_face ).vertices ){
+      for(Vertex vertice : ( (Face)other_face ).vertices ){
         other_z_cummulative += vertice.z;
       }
 

@@ -133,13 +133,13 @@ public class Renderer extends JPanel {
     System.out.println("entered show_shadows");
     setBackground(Color.WHITE);
 
-    scene.set_shadow();
+    /*scene.set_shadow();
     int len = scene.fun.size();
     int[] x_points = new int[len];
     int[] y_points = new int[len];
 
     int i =0 ;
-    for(Point3D v : scene.fun){
+    for(Vertex v : scene.fun){
       x_points[i] = (int)( scale*v.x/( 1-(v.z/scene.camera_position[2]) ) );
       y_points[i] = (int)( scale*v.y/( 1-(v.z/scene.camera_position[2]) ) );
       g2d.drawLine(x_points[i], y_points[i], x_points[i], y_points[i]);
@@ -147,7 +147,7 @@ public class Renderer extends JPanel {
     }
     g2d.setPaint(Color.DARK_GRAY);
 
-    g2d.fill( new Polygon(x_points, y_points, len) );
+    g2d.fill( new Polygon(x_points, y_points, len) );*/
 
 
   }

@@ -14,7 +14,6 @@ public class Scene {
   double[] camera_position;
   double[] point_light_source_position;
   final int INITIAL_SCALE = 150;
-  ArrayList<Point3D> fun;
 
   public Scene(){
     this.polyhedron = new Polyhedron("./polyhedra_data/Cube.txt");;
@@ -90,7 +89,7 @@ public class Scene {
 
 
         for( int i=0; i<face.number_of_vertices; i++ ){
-          Point3D p = face.vertices[i];
+          Vertex p = face.vertices[i];
 
           xpoints[i] = (int)( scale*p.x/( 1-(p.z/camera_position[2]) ) );
           ypoints[i] = (int)( scale*p.y/( 1-(p.z/camera_position[2]) ) );
@@ -105,20 +104,20 @@ public class Scene {
 
     public void set_shadow(){
       double Vz_new = -4;
-      ArrayList<Point3D> fun1 = new ArrayList<Point3D>();
+      ArrayList<Vertex> fun1 = new ArrayList<Vertex>();
 
       for( Face face : polyhedron.faces){
-        for( Point3D vertex : face.vertices){
+        for( Vertex vertex : face.vertices){
           double t = ( Vz_new - point_light_source_position[2] ) / ( vertex.z - point_light_source_position[2] );
           double Vx_new = point_light_source_position[0] + t*(vertex.x - point_light_source_position[0]);
           double Vy_new = point_light_source_position[1] + t*(vertex.y - point_light_source_position[1]);
-          fun1.add( new Point3D(Vx_new, Vy_new, Vz_new) );
+          fun1.add( new Vertex(Vx_new, Vy_new, Vz_new) );
 
 
         }
       }
 
-      fun = QuickHull.quickHull(fun1);
+      //fun = QuickHull.quickHull(fun1);
 
     }
 
