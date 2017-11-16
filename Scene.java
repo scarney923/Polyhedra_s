@@ -122,7 +122,17 @@ public class Scene {
       //fun = ConvexHull.convexHull(fun1, );
 
     }
-
+    
+    // public void face_projection(Graphics2D g2d){
+//       for(Face face: polyhedron.faces){
+//          for(Vertex vertex: face.vertices){
+//          
+//          Area initial_area = new Area(new Polygon();
+//          g2d.setPaint(Color.black); 
+//          g2d.fill(initial_area); 
+//       }
+//      }
+//     }
 
 
 

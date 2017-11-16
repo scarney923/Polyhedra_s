@@ -28,7 +28,4 @@ public class Polyhedron {
     for(Vertex vertex : vertices)
       vertex.apply_transform(M);
   }
-
-
-
 }
