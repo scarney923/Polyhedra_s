@@ -95,12 +95,10 @@ public class Scene {
 
 
         for( int i=0; i<face.number_of_vertices; i++ ){
-          Vertex p = face.vertices[i];
-          System.out.println("V UNPROJECTED : " + p );
+          Vertex v = face.vertices[i];
 
-          xpoints[i] = (int)( scale*p.x/( 1-(p.z/camera_position[2]) ) );
-          ypoints[i] = (int)( scale*p.y/( 1-(p.z/camera_position[2]) ) );
-          //System.out.printf("[PROJECTED VERTEX] xproj %d yproh %d\n", xpoints[i], ypoints[i]);
+          xpoints[i] = (int)( scale*v.x/( 1-(v.z/camera_position[2]) ) );
+          ypoints[i] = (int)( scale*v.y/( 1-(v.z/camera_position[2]) ) );
 
         }
         face.x_coords_projected = xpoints;
@@ -120,46 +118,20 @@ public class Scene {
 
 
       for( int i=0; i<face.number_of_vertices; i++ ){
-        Vertex p = face.shadow[i];
-        System.out.println("S UNPROJECTED : " + p );
+        Vertex v = face.shadow[i];
 
-
-        xpoints[i] = (int)( scale*p.x / ( 1-(p.z/camera_position[2]) )  ); //
-        ypoints[i] = (int)( scale*p.y /( 1-(p.z/camera_position[2]) ));
-        //System.out.printf("[SHADOW] xproj %d yproh %d\n", xpoints[i], ypoints[i]);
+        xpoints[i] = (int)( scale*v.x / ( 1-(v.z/camera_position[2]) )  ); //
+        ypoints[i] = (int)( scale*v.y /( 1-(v.z/camera_position[2]) ));
       }
       face.shadow_x_coords_projected = xpoints;
       face.shadow_y_coords_projected = ypoints;
-      System.out.println();
 
 
 
     }
 
   }
-
-    /*public void set_shadow(){
-      double Vz_new = -10;
-      polyhedron.shadow = new ArrayList<Vertex>();
-
-      for( Vertex vertex : polyhedron.vertices){
-        System.out.print("hidden from light source? %b , adjacent to hidden face? %b\n", vertex.is_hidden_from_lightsource, vertex.is_adjacent_to_hidden_face);
-
-        System.out.printf("hidden from light source? %b , adjacent to hidden face? %b\n", vertex.is_hidden_from_lightsource, vertex.is_adjacent_to_hidden_face);
-        if( !vertex.is_hidden_from_lightsource && vertex.is_adjacent_to_hidden_face ){
-
-
-          double t = ( Vz_new - point_light_source_position[2] ) / ( vertex.z - point_light_source_position[2] );
-          double Vx_new = point_light_source_position[0] + t*(vertex.x - point_light_source_position[0]);
-          double Vy_new = point_light_source_position[1] + t*(vertex.y - point_light_source_position[1]);
-          polyhedron.shadow.add( new Vertex(Vx_new, Vy_new, Vz_new) );
-
-        }
-      }
-
-    }*/
-
-    public void set_shadow2(){
+    public void set_shadows(){
       double Vy_new = -2.5;
 
       for( Face face : polyhedron.faces){
@@ -177,30 +149,6 @@ public class Scene {
       }
 
     }
-
-
-    public void set_vertex_visibility_flags(){
-
-      for(Face face : polyhedron.faces)
-        for( Vertex vertex : face.vertices)
-          vertex.is_hidden_from_lightsource = true;
-
-
-      for(Face face : polyhedron.faces){
-        for( Vertex vertex : face.vertices){
-
-          if(face.is_visible_to_lightsource)
-            vertex.is_hidden_from_lightsource = false;
-          else
-            vertex.is_adjacent_to_hidden_face = true;
-
-          }
-        }
-    }
-
-
-
-
 
     private double eliminate_negatives(double value){
       if(value > 0)

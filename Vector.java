@@ -7,24 +7,12 @@ public class Vector{
 
   public static double dotproduct(double[] v1, double[] v2) {
       double dot = 0;
-      for(int i=0; i<v1.length; i++){
+      for(int i=0; i<v1.length; i++)
         dot += v1[i]*v2[i];
-      }
+
       return dot;
   }
 
-  public static double[] get_cartesian_components_of_homogeneous_vector(double[] homogeneous_v){
-    double[] cartesian_v = new double[homogeneous_v.length-1];
-    for(int i=0; i<cartesian_v.length; i++)
-      cartesian_v[i] = homogeneous_v[i]/homogeneous_v[homogeneous_v.length-1];
-
-    return cartesian_v;
-  }
-
-  public static Vertex get_vertex(double[] v){
-    Vertex cartesian_point = new Vertex(v[0],v[1],v[2]);
-    return cartesian_point;
-  }
   /*
   This method is specific to 3 dimensional vectors and should be generalized to work for
   vectors of any size.
@@ -72,7 +60,7 @@ public class Vector{
 
 
   //applies a linear transformation on vector
-  public static double[] apply_transform(double[] v, double[][] M) {
+  public static double[] get_transformed_vector(double[] v, double[][] M) {
       int m = M.length; //number of rows of M
       int n = M[0].length; //number of columns -- should be equal to length of v
       double[] v2 = new double[v.length];
@@ -85,7 +73,7 @@ public class Vector{
   }
 
 
-  
+
 
 
 

@@ -5,83 +5,6 @@ Utility class that offers methods pertaining to 3D transformation matrices.
 public class AffineTransform3D {
 
 
-  /*
-  Multiply two matrices a and b together, in given order. */
-  public static double[][] multiply(double[][] a, double[][] b){
-   int m1 = a.length;
-   int n1 = a[0].length;
-   int m2 = b.length;
-   int n2 = b[0].length;
-   double[][] c = new double[m1][n2];
-   for (int i = 0; i < m1; i++)
-       for (int j = 0; j < n2; j++)
-           for (int k = 0; k < n1; k++)
-               c[i][j] += a[i][k] * b[k][j];
-   return c;
- }
-
-
-    /*
-    Currently not in use
-    */
-    public static double[][] get_scale_transform(double sx, double sy, double sz) {
-      double[][] M = {
-        { sx, 0, 0, 0 },
-        { 0, sy, 0, 0 },
-        { 0, 0, sz, 0 },
-        { 0, 0, 0, 1 } };
-
-      return M;
-    }
-
-    /*
-    Currently not in use
-    */
-    public static double[][] get_translate_transform(int tx, int ty, int tz) {
-      double[][] M = {
-        { 1, 0, 0, tx },
-        { 0, 1, 0, ty },
-        { 0, 0, 1, tz },
-        { 0, 0, 0, 1 } };
-
-      return M;
-    }
-
-
-    /*
-    Transformation matrix for rotating around z-axis
-    */
-    public static double[][] get_rotation_transform_zaxis(double theta){
-      double[][] M = {
-        { Math.cos(theta), -Math.sin(theta), 0, },
-        { Math.sin(theta), Math.cos(theta), 0 },
-        { 0, 0, 1 }};
-
-      return M;
-    }
-
-    /*
-    Transformation matrix for rotating around y-axis
-    */
-    public static double[][] get_rotation_transform_yaxis(double theta){
-      double[][] M = {
-        { Math.cos(theta), 0, Math.sin(theta) },
-        { 0, 1, 0, 0 },
-        { -Math.sin(theta), 0, Math.cos(theta) }};
-      return M;
-    }
-
-    /*
-    Transformation matrix for rotating around x-axis
-    */
-    public static double[][] get_rotation_transform_xaxis(double theta){
-      double[][] M = {
-        { 1, 0, 0 },
-        { 0, Math.cos(theta), -Math.sin(theta) },
-        { 0, Math.sin(theta), Math.cos(theta) }};
-
-      return M;
-    }
     /*
     To obtain the transformation matrix of an arbitrary axis, we "transform the space"
     such as to make the axis align with the z-axis. Then we simply use the standard transformation
@@ -102,23 +25,6 @@ public class AffineTransform3D {
       double[][] M = { { ( c+(1-c)*ax*ax ), ( (1-c)*ax*ay-s*az ), ( (1-c)*ax*az + s*ay ) },
         { (1-c)*ax*ay + s*az, c+(1-c)*ay*ay, (1-c)*ay*az - s*ax },
         { (1-c)*ax*az - s*ay, (1-c)*ay*az + s*ax, c + (1-c)*az*az } };
-
-      return M;
-    }
-
-
-    /*
-    Not in use. It turns out that it is not appropriate to use this transformation on (and alter the state of)
-    the cube, but rather obtain the projected coordinates as temporary values within the drawing functions.
-    */
-    public static double[][] get_perspective_transform(double e) {
-
-
-      double[][] M = {
-        { 1, 0, 0, 0 },
-        { 0, 1, 0, 0 },
-        { 0, 0, 1, 0 },
-        { 0, 0, -(1/e), 1 } };
 
       return M;
     }

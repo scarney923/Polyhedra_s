@@ -5,7 +5,7 @@ public class Main
 {
 
     public static void main(String[] args){
-    
+
 
     JFrame frame = new JFrame();
     JFrame cp_frame = new JFrame();
@@ -27,9 +27,6 @@ public class Main
     frame.add(canvas);
     cp_frame.add(controlPanel);
 
-
-		//frame.pack();
-		//frame.setResizable(true);
     frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
 		frame.setVisible(true);

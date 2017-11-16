@@ -69,9 +69,6 @@ public class PolyDataFileParser {
 
   public Face[] get_faces(int number_of_vertices, int number_of_faces, Vertex[] vertices){
     scanner.nextLine();
-    for(int i =0;i < number_of_vertices; i++){
-      //System.out.println(vertices[i]);
-    }
     Face[] faces = new Face[ number_of_faces ];
 
     int which_vertice;
@@ -90,10 +87,6 @@ public class PolyDataFileParser {
          face_vertices[ k ] = vertices[ which_vertice ];
       }
       color_number = Integer.parseInt( tokens[ number_of_face_vertices ] );
-      //System.out.println(number_of_face_vertices);
-      //System.out.println(color_number);
-      //System.out.println(face_vertices);
-
 
       faces[ i ] = new Face( number_of_face_vertices, color_number, face_vertices );
     }

@@ -7,8 +7,6 @@ public class Vertex  {
   double x;
   double y;
   double z;
-  boolean is_adjacent_to_hidden_face;
-  boolean is_hidden_from_lightsource;
 
   public Vertex(double x, double y, double z){
     this.x=x;
@@ -41,7 +39,7 @@ public class Vertex  {
 
   public void apply_transform(double[][] M) {
       double[] v0 = this.get_vector_form();
-      double[] v = Vector.apply_transform( v0 , M );
+      double[] v = Vector.get_transformed_vector( v0 , M );
       x = v[0];
       y = v[1];
       z = v[2];

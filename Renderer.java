@@ -45,14 +45,18 @@ public class Renderer extends JPanel {
 
   public void paintComponent(Graphics g){
     super.paintComponent(g);
-    System.out.printf("NEW DRAW\n\n\n");
 
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.translate(getWidth()/2,getHeight()/2);
     g2d.scale(1,-1);
 
-    if(shadows)
+    setBackground(Color.BLACK);
+
+
+    if(shadows){
+      setBackground(Color.WHITE);
       show_shadows(g2d);
+    }
     if(colors)
       show_colors(g2d);
     if(shades)
@@ -131,28 +135,13 @@ public class Renderer extends JPanel {
   }
 
   public void show_shadows(Graphics2D g2d){
-    System.out.printf("entered show_shadows\n");
-    setBackground(Color.WHITE);
     g2d.setPaint(Color.DARK_GRAY);
 
-
-    scene.set_shadow2();
+    scene.set_shadows();
     scene.set_projected_shadows(scale);
 
-    for(Face face : scene.polyhedron.faces){
-      //System.out.println(face);
-      for(Vertex v : face.shadow){
-        //System.out.println(v);
-
-      }
-      //System.out.println();
+    for(Face face : scene.polyhedron.faces)
       g2d.fill( new Polygon(face.shadow_x_coords_projected, face.shadow_y_coords_projected , face.number_of_vertices ) );
-
-
-    }
-
-
-
 
   }
 
