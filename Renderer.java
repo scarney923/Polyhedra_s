@@ -51,12 +51,12 @@ public class Renderer extends JPanel {
 		g2d.translate(getWidth()/2,getHeight()/2);
     g2d.scale(1,-1);
 
+    if(shadows)
+      show_shadows(g2d);
     if(colors)
       show_colors(g2d);
     if(shades)
       show_shades(g2d, colors);
-    if(shadows)
-      show_shadows(g2d);
     if(wireframe)
       show_wireframe(g2d);
 

@@ -124,8 +124,8 @@ public class Scene {
         System.out.println("S UNPROJECTED : " + p );
 
 
-        xpoints[i] = (int)( (scale+50)*p.x  ); //   / ( 1-(p.z/camera_position[2]) )
-        ypoints[i] = (int)( (scale+50)*p.y  ); //   /( 1-(p.z/camera_position[2]) )
+        xpoints[i] = (int)( scale*p.x / ( 1-(p.z/camera_position[2]) )  ); //
+        ypoints[i] = (int)( scale*p.y /( 1-(p.z/camera_position[2]) ));
         //System.out.printf("[SHADOW] xproj %d yproh %d\n", xpoints[i], ypoints[i]);
       }
       face.shadow_x_coords_projected = xpoints;
@@ -160,7 +160,7 @@ public class Scene {
     }*/
 
     public void set_shadow2(){
-      double Vz_new = -5;
+      double Vy_new = -2.5;
 
       for( Face face : polyhedron.faces){
           face.shadow = new Vertex[face.vertices.length];
@@ -168,9 +168,9 @@ public class Scene {
         for(int i = 0; i < face.vertices.length; i ++){
           Vertex vertex = face.vertices[i];
 
-          double t = ( Vz_new - point_light_source_position[2] ) / ( vertex.z - point_light_source_position[2] );
+          double t = ( Vy_new - point_light_source_position[1] ) / ( vertex.y - point_light_source_position[1] );
           double Vx_new = point_light_source_position[0] + t*(vertex.x - point_light_source_position[0]);
-          double Vy_new = point_light_source_position[1] + t*(vertex.y - point_light_source_position[1]);
+          double Vz_new = point_light_source_position[2] + t*(vertex.z - point_light_source_position[2]);
           face.shadow[i] = new Vertex(Vx_new, Vy_new, Vz_new);
 
         }
