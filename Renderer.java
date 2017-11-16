@@ -81,8 +81,6 @@ public class Renderer extends JPanel {
   }
 
   public void show_colors(Graphics2D g2d){
-    scene.set_visiblity_flags();
-
     for( Face face : scene.polyhedron.faces ){
       if(face.is_visible_to_camera){
 
@@ -105,8 +103,6 @@ public class Renderer extends JPanel {
 
   */
   public void show_shades(Graphics2D g2d, Boolean colors){
-    scene.set_visiblity_flags();
-
     for( Face face : scene.polyhedron.faces ){
       if(face.is_visible_to_camera){
 

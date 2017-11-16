@@ -170,11 +170,12 @@ class ControlPanel extends JPanel implements ActionListener {
       if(valid_input_coordinates)
         scene.polyhedron.transform( AffineTransform3D.get_rotation_transform_arb(v, rotate_increment_temp ) );
 
+
     }
 
-
+    scene.polyhedron.set_face_normals();
     scene.set_visiblity_flags();
-    Arrays.sort(scene.polyhedron.faces);
+    scene.polyhedron.sort_faces_by_relative_camera_proximity();
     scene.set_projection(canvas.scale);
     canvas.repaint();
 

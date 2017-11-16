@@ -6,19 +6,21 @@ Responsible for storing the necessary data of a face, i.e. its vertices and colo
 */
 public class Face implements Comparable {
   int color_number;
-  Vertex[] vertices;
   int number_of_vertices;
-  double[] normal;
 
-  boolean is_visible_to_camera;
-  boolean is_visible_to_lightsource;
-
+  Vertex[] vertices;
   int[] x_coords_projected;
   int[] y_coords_projected;
 
   Vertex[] shadow;
   int[] shadow_x_coords_projected;
   int[] shadow_y_coords_projected;
+
+  double[] normal;
+
+  boolean is_visible_to_camera;
+  boolean is_visible_to_lightsource;
+
 
   public Face(int number_of_vertices, int color_number, Vertex ... vertices ){
     this.number_of_vertices = number_of_vertices;

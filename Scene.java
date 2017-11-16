@@ -21,6 +21,7 @@ public class Scene {
     this.polyhedron = new Polyhedron("./polyhedra_data/Cube.txt");;
     this.camera_position = new double[] {0.0,0.0,10.0};
     this.point_light_source_position = new double[] {0.0,500.0,1000.0};
+    polyhedron.set_face_normals();
     set_visiblity_flags();
     set_projection(INITIAL_SCALE);
 
@@ -69,9 +70,9 @@ public class Scene {
 
         double[] point = { face.vertices[0].x, face.vertices[0].y, face.vertices[0].z};
 
-        double[] v0 = { face.vertices[1].x-face.vertices[0].x, face.vertices[1].y-face.vertices[0].y, face.vertices[1].z-face.vertices[0].z };
+        /*double[] v0 = { face.vertices[1].x-face.vertices[0].x, face.vertices[1].y-face.vertices[0].y, face.vertices[1].z-face.vertices[0].z };
         double[] v1 = { face.vertices[2].x-face.vertices[0].x, face.vertices[2].y-face.vertices[0].y, face.vertices[2].z-face.vertices[0].z };
-        face.normal = Vector.crossproduct(v0,v1);
+        face.normal = Vector.crossproduct(v0,v1);*/
 
         if( Vector.dotproduct( face.normal, Vector.subtract(camera_position, point) ) > 0 )
           face.is_visible_to_camera = true;

@@ -9,7 +9,7 @@ public class Polyhedron {
   int number_of_faces;
   Vertex[] vertices;
   Face[] faces;
-  
+
 
 
 
@@ -28,6 +28,15 @@ public class Polyhedron {
   public void transform(double[][] M){
     for(Vertex vertex : vertices)
       vertex.apply_transform(M);
+  }
+
+  public void set_face_normals(){
+    for(Face face : faces)
+      face.set_normal();
+  }
+
+  public void sort_faces_by_relative_camera_proximity(){
+    Arrays.sort(faces);
   }
 
 
