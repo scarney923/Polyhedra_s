@@ -9,19 +9,22 @@ public class Face implements Comparable {
   Vertex[] vertices;
   int number_of_vertices;
   double[] normal;
-  boolean is_visible;
+
+  boolean is_visible_to_camera;
+  boolean is_visible_to_lightsource;
+
   int[] x_coords_projected;
   int[] y_coords_projected;
 
-  ArrayList<Point3D[]> shadows_unrestricted;
-  Area shadow;
+  Vertex[] shadow;
+  int[] shadow_x_coords_projected;
+  int[] shadow_y_coords_projected;
 
   public Face(int number_of_vertices, int color_number, Vertex ... vertices ){
     this.number_of_vertices = number_of_vertices;
     this.vertices = new Vertex[number_of_vertices+1];
 
     for(int i = 0; i < number_of_vertices; i++){
-      System.out.println(vertices[i]);
       this.vertices[i] = vertices[i];
 
     }
@@ -29,7 +32,6 @@ public class Face implements Comparable {
     this.vertices[number_of_vertices] = this.vertices[0];
     this.color_number = color_number;
 
-    shadows_unrestricted = new ArrayList<Point3D[]>();
 
 
   }

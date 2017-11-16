@@ -45,6 +45,7 @@ public class Renderer extends JPanel {
 
   public void paintComponent(Graphics g){
     super.paintComponent(g);
+    System.out.printf("NEW DRAW\n\n\n");
 
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.translate(getWidth()/2,getHeight()/2);
@@ -79,7 +80,7 @@ public class Renderer extends JPanel {
     scene.set_visiblity_flags();
 
     for( Face face : scene.polyhedron.faces ){
-      if(face.is_visible){
+      if(face.is_visible_to_camera){
 
         g2d.setPaint( colors_map[ face.color_number ] );
         g2d.fill( new Polygon(face.x_coords_projected, face.y_coords_projected, face.number_of_vertices) );
@@ -103,7 +104,7 @@ public class Renderer extends JPanel {
     scene.set_visiblity_flags();
 
     for( Face face : scene.polyhedron.faces ){
-      if(face.is_visible){
+      if(face.is_visible_to_camera){
 
         double brightness = scene.get_point_brightness( face.vertices[0].get_vector_form(), face.normal );
 
@@ -130,24 +131,27 @@ public class Renderer extends JPanel {
   }
 
   public void show_shadows(Graphics2D g2d){
-    System.out.println("entered show_shadows");
+    System.out.printf("entered show_shadows\n");
     setBackground(Color.WHITE);
-
-    /*scene.set_shadow();
-    int len = scene.fun.size();
-    int[] x_points = new int[len];
-    int[] y_points = new int[len];
-
-    int i =0 ;
-    for(Vertex v : scene.fun){
-      x_points[i] = (int)( scale*v.x/( 1-(v.z/scene.camera_position[2]) ) );
-      y_points[i] = (int)( scale*v.y/( 1-(v.z/scene.camera_position[2]) ) );
-      g2d.drawLine(x_points[i], y_points[i], x_points[i], y_points[i]);
-      i++;
-    }
     g2d.setPaint(Color.DARK_GRAY);
 
-    g2d.fill( new Polygon(x_points, y_points, len) );*/
+
+    scene.set_shadow2();
+    scene.set_projected_shadows(scale);
+
+    for(Face face : scene.polyhedron.faces){
+      //System.out.println(face);
+      for(Vertex v : face.shadow){
+        //System.out.println(v);
+
+      }
+      //System.out.println();
+      g2d.fill( new Polygon(face.shadow_x_coords_projected, face.shadow_y_coords_projected , face.number_of_vertices ) );
+
+
+    }
+
+
 
 
   }

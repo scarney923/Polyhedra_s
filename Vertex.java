@@ -3,12 +3,12 @@ Stores the coordinates of a 3D point.
 A Face object contains four such objects.
 */
 
-public class Vertex{
+public class Vertex  {
   double x;
   double y;
   double z;
-  boolean adjacent_to_hidden_face;
-  boolean hidden;
+  boolean is_adjacent_to_hidden_face;
+  boolean is_hidden_from_lightsource;
 
   public Vertex(double x, double y, double z){
     this.x=x;
@@ -50,6 +50,7 @@ public class Vertex{
   public String toString(){
     return "x: " + this.x + " y: " + this.y + " z: " + this.z;
   }
+
 
 
 }
